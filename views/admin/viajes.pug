@@ -1,0 +1,83 @@
+extends ./layout/index
+
+block contenido
+  main.container.mt-5
+    h1.text-center.mb-5= pagina
+    
+    .row.mb-4
+      .col-md-12.text-end
+        a.btn.btn-success(href="/admin/viajes/crear")
+          i.fas.fa-plus.me-2
+          | Nuevo Viaje
+    
+    if viajes && viajes.length
+      .table-responsive
+        table.table.table-striped.table-hover
+          thead.bg-primary.text-white
+            tr
+              th(scope="col") Imagen
+              th(scope="col") Título
+              th(scope="col") Precio
+              th(scope="col") Fecha
+              th(scope="col") Disponibles
+              th(scope="col") Acciones
+          tbody
+            each viaje in viajes
+              tr
+                td
+                  if viaje.imagen.startsWith('http')
+                    img.img-thumbnail(src=viaje.imagen alt=viaje.titulo width="100")
+                  else
+                    img.img-thumbnail(src=`/img/destinos_${viaje.imagen}.jpg` alt=viaje.titulo width="100")
+                td= viaje.titulo
+                td= viaje.precio.toFixed(2) + ' DH'
+                td
+                  | Del #{new Date(viaje.fecha_ida).toLocaleDateString()}
+                  br
+                  | al #{new Date(viaje.fecha_vuelta).toLocaleDateString()}
+                td= viaje.disponibles
+                td.d-flex.gap-1
+                  a.btn.btn-sm.btn-info(href=`/viajes/${viaje.slug}` target="_blank")
+                    i.fas.fa-eye
+                  a.btn.btn-sm.btn-warning(href=`/admin/viajes/editar/${viaje.id}`)
+                    i.fas.fa-edit
+                  button.btn.btn-sm.btn-danger(
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#eliminarModal"
+                    data-bs-id=viaje.id
+                    data-bs-titulo=viaje.titulo
+                  )
+                    i.fas.fa-trash
+    else
+      .alert.alert-info.text-center No hay viajes registrados
+    
+    // Modal para confirmar eliminación
+    #eliminarModal.modal.fade(tabindex="-1" aria-labelledby="eliminarModalLabel" aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          .modal-header
+            h5#eliminarModalLabel.modal-title Eliminar Viaje
+            button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
+          .modal-body
+            p ¿Está seguro que desea eliminar el viaje <strong id="modalViajeNombre"></strong>?
+            p Esta acción no se puede deshacer.
+          .modal-footer
+            form#formEliminar(action="" method="POST")
+              button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cancelar
+              button.btn.btn-danger(type="submit") Eliminar
+
+block scripts
+  script.
+    // Configurar modal para eliminar viaje
+    const eliminarModal = document.getElementById('eliminarModal');
+    if (eliminarModal) {
+      eliminarModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        const id = button.getAttribute('data-bs-id');
+        const titulo = button.getAttribute('data-bs-titulo');
+        
+        document.getElementById('modalViajeNombre').textContent = titulo;
+        document.getElementById('formEliminar').action = `/admin/viajes/eliminar/${id}`;
+      });
+    }

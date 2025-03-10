@@ -1,0 +1,18 @@
+extends ./layout/index
+
+block contenido
+  main.container.mt-5
+    .row.justify-content-center
+      .col-md-8
+        .card.border-danger.shadow
+          .card-header.bg-danger.text-white
+            h1.text-center.mb-0
+              i.fas.fa-exclamation-triangle.me-2
+              | Error
+          .card-body.text-center
+            h2= pagina
+            p.lead.mt-4= mensaje
+            .mt-5
+              a.btn.btn-outline-danger(href="/")
+                i.fas.fa-home.me-2
+                | Volver al Inicio

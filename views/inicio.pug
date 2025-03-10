@@ -1,0 +1,41 @@
+extends ./layout/index
+
+block slider
+    .slider 
+        h1 voyage pour oublier
+        em VPO 
+
+block contenido
+    main.container.mt-5
+    h2.text-center.m-5 Qui somme nous
+        .row.mt-5 
+            .col-md-6.mb-5 
+                p.text-justify 
+                    | En
+                    span  OVS 
+                    |Notre mission est de faire de chaque voyage une expérience inoubliable. Forts de plusieurs années d'expérience dans le secteur du tourisme, nous offrons à nos clients un service personnalisé et exclusif, conçu pour répondre à tous leurs besoins de voyage. Des escapades de week-end aux aventures exotiques à travers le monde, notre équipe d'experts est là pour vous aider à planifier le voyage de vos rêves. Nous travaillons avec un large réseau de partenaires mondiaux pour vous offrir les meilleures offres sur les vols, l'hébergement et les activités, en veillant à ce que vous profitiez de chaque instant sans souci.
+                p.text-justifier 
+                    span Pourquoi nous choisir ?
+                    |  Parce que nous croyons que chaque voyage est une occasion de créer des souvenirs uniques. Nous nous occupons de tous les détails, pour que vous n'ayez qu'à vous soucier de profiter.
+                p.text-center 
+                    span Voyagez avec nous et découvrez un monde de possibilités !
+            .col-md-6
+                img(src='/img/inicio_nosotros.jpg', alt="imagen nosotros", class="img-fluid")
+
+        include ./layout/bloque_viajes
+
+    .descuento
+        .container
+            .row 
+                .col-md-6
+                    .contenido 
+                        h3 5% de reduction 
+                        p.titulo Voyage a Portugal 
+                        p.fecha 20 de Marzo - 28 de Marzo de 2025
+                        p.precio 7500 DH 
+
+    h3.text-center.mt-5 Testimoniales
+    include ./layout/bloque_testimoniales
+    script.
+        window.viajesEvents = !{viajesEvents};
+    script(src="/js/calendario.js")

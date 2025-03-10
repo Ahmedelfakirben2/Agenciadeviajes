@@ -1,0 +1,271 @@
+extends ./layout/index
+
+block contenido
+    main.container.mt-5
+        .row
+            .col-md-8
+                // Imagen actualizada para manejar tanto URLs como nombres de archivo
+                if resultado.imagen && resultado.imagen.startsWith('http')
+                    img(src=resultado.imagen, alt=`Imagen de ${resultado.titulo}`, class="img-fluid")
+                else
+                    img(src=`/img/destinos_${resultado.imagen}.jpg`, alt=`Imagen de ${resultado.titulo}`, class="img-fluid")
+                
+                .card.mt-4
+                    .card-body
+                        h1.card-title= resultado.titulo
+                        
+                        // Información básica del viaje
+                        .row.mb-4
+                            .col-md-6
+                                h4.mb-3 Fechas y Precio
+                                p.lead
+                                    i.fas.fa-calendar-alt.me-2
+                                    | Fecha Ida: #{new Date(resultado.fecha_ida).toLocaleDateString()}
+                                p.lead
+                                    i.fas.fa-calendar-alt.me-2
+                                    | Fecha Vuelta: #{new Date(resultado.fecha_vuelta).toLocaleDateString()}
+                                p.lead
+                                    i.fas.fa-money-bill-wave.me-2
+                                    strong Precio: #{resultado.precio} DH
+                                p.lead
+                                    i.fas.fa-users.me-2
+                                    | Plazas Disponibles: #{resultado.disponibles}
+                            
+                            .col-md-6
+                                h4.mb-3 Punto de Encuentro
+                                p
+                                    i.fas.fa-map-marker-alt.me-2
+                                    | #{resultado.punto_encuentro || 'Por determinar'}
+
+                        // Descripción detallada
+                        h4.mb-3 Descripción del Viaje
+                        p.mb-4= resultado.descripcion
+
+                        // Mapa del Itinerario
+                        if resultado.puntos_itinerario
+                            h4.mb-3 Mapa del Itinerario
+                            .card.mb-4
+                                .card-body
+                                    #mapa-itinerario(style="height: 500px;")
+                                    .mt-3
+                                        .form-check.form-switch
+                                            input#togglePOI.form-check-input(type="checkbox", role="switch")
+                                            label.form-check-label(for="togglePOI") Mostrar puntos de interés
+                            script(src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js')
+                            link(rel='stylesheet', href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css')
+                            script.
+                                const map = L.map('mapa-itinerario');
+                                const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                    attribution: '© OpenStreetMap contributors'
+                                }).addTo(map);
+
+                                // Capa de puntos de interés
+                                const poiLayer = L.layerGroup();
+                                
+                                // Función para cargar puntos de interés
+                                async function cargarPuntosDeInteres(bounds) {
+                                    const query = `
+                                        [out:json][timeout:25];
+                                        (
+                                            way["historic"="monument"](${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()});
+                                            node["historic"="monument"](${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()});
+                                            way["tourism"="attraction"](${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()});
+                                            node["tourism"="attraction"](${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()});
+                                            way["amenity"="place_of_worship"](${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()});
+                                            node["amenity"="place_of_worship"](${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()});
+                                            way["tourism"="museum"](${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()});
+                                            node["tourism"="museum"](${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()});
+                                        );
+                                        out center;
+                                    `;
+                                    
+                                    try {
+                                        const response = await fetch('https://overpass-api.de/api/interpreter', {
+                                            method: 'POST',
+                                            body: query
+                                        });
+                                        const data = await response.json();
+                                        
+                                        poiLayer.clearLayers();
+                                        
+                                        data.elements.forEach(element => {
+                                            const lat = element.lat || element.center.lat;
+                                            const lon = element.lon || element.center.lon;
+                                            const name = element.tags.name || 'Punto de interés';
+                                            const type = element.tags.historic || element.tags.tourism || element.tags.amenity;
+                                            
+                                            const poiIcon = L.divIcon({
+                                                html: '<i class="fas fa-landmark"></i>',
+                                                className: 'poi-icon',
+                                                iconSize: [20, 20]
+                                            });
+                                            
+                                            L.marker([lat, lon], {icon: poiIcon})
+                                                .bindPopup(`
+                                                    <strong>${name}</strong><br>
+                                                    Tipo: ${type}
+                                                `)
+                                                .addTo(poiLayer);
+                                        });
+                                    } catch (error) {
+                                        console.error('Error al cargar puntos de interés:', error);
+                                    }
+                                }
+
+                                // Puntos del itinerario
+                                const puntos = !{JSON.stringify(resultado.puntos_itinerario)};
+                                const markers = [];
+                                const routeIcon = L.divIcon({
+                                    html: '<i class="fas fa-map-marker-alt"></i>',
+                                    className: 'route-icon',
+                                    iconSize: [30, 30]
+                                });
+
+                                puntos.forEach((punto, index) => {
+                                    const marker = L.marker([punto.lat, punto.lng], {icon: routeIcon})
+                                        .bindPopup(`
+                                            <strong>Día ${index + 1}</strong><br>
+                                            ${punto.descripcion}
+                                        `)
+                                        .addTo(map);
+                                    markers.push(marker);
+                                });
+
+                                if (markers.length > 0) {
+                                    const bounds = L.featureGroup(markers).getBounds();
+                                    map.fitBounds(bounds);
+
+                                    // Conectar los puntos con líneas
+                                    const coordenadas = markers.map(marker => marker.getLatLng());
+                                    const polyline = L.polyline(coordenadas, {
+                                        color: 'red',
+                                        weight: 3,
+                                        opacity: 0.7
+                                    }).addTo(map);
+
+                                    // Cargar puntos de interés iniciales
+                                    cargarPuntosDeInteres(bounds);
+                                }
+
+                                // Manejar el toggle de puntos de interés
+                                document.getElementById('togglePOI').addEventListener('change', function(e) {
+                                    if (e.target.checked) {
+                                        map.addLayer(poiLayer);
+                                    } else {
+                                        map.removeLayer(poiLayer);
+                                    }
+                                });
+
+                                // Estilos para los iconos
+                                const style = document.createElement('style');
+                                style.textContent = `
+                                    .poi-icon {
+                                        color: #1a73e8;
+                                        text-align: center;
+                                        line-height: 20px;
+                                    }
+                                    .route-icon {
+                                        color: #d32f2f;
+                                        text-align: center;
+                                        line-height: 30px;
+                                    }
+                                `;
+                                document.head.appendChild(style);
+
+                        // Itinerario detallado
+                        if resultado.itinerario
+                            h4.mb-3 Itinerario Detallado
+                            p.mb-4= resultado.itinerario
+
+                        // Incluye y No Incluye
+                        .row.mb-4
+                            .col-md-6
+                                h4.mb-3
+                                    i.fas.fa-check.text-success.me-2
+                                    | Incluye
+                                p= resultado.incluye || 'Información no disponible'
+                            
+                            .col-md-6
+                                h4.mb-3
+                                    i.fas.fa-times.text-danger.me-2
+                                    | No Incluye
+                                p= resultado.no_incluye || 'Información no disponible'
+
+                        // Requisitos
+                        if resultado.requisitos
+                            h4.mb-3 Requisitos
+                            p.mb-4= resultado.requisitos
+
+            .col-md-4
+                // Tarjeta de Reserva
+                .card.mb-4
+                    .card-body
+                        h2.card-title.text-center Reserva tu Viaje
+                        if resultado.disponibles > 0
+                            p.text-center ¡Aún quedan #{resultado.disponibles} plazas disponibles!
+                            .d-grid.gap-2
+                                a.btn.btn-success.btn-lg(href=`/reservar/${resultado.slug}`)
+                                    i.fas.fa-ticket-alt.me-2
+                                    | Reservar Plaza
+                        else
+                            .alert.alert-danger.text-center
+                                i.fas.fa-exclamation-triangle.me-2
+                                | Lo sentimos, no hay plazas disponibles
+
+                // Información del Guía
+                if resultado.guiaTuristico
+                    .card.mb-4
+                        .card-body
+                            h3.card-title.h4.mb-3 Tu Guía Turístico
+                            if resultado.guiaTuristico.foto
+                                // Manejo condicional para la foto del guía
+                                if resultado.guiaTuristico.foto.startsWith('http')
+                                    img.rounded-circle.mb-3(src=resultado.guiaTuristico.foto, alt=`Foto de ${resultado.guiaTuristico.nombre}`, style="width: 150px; height: 150px; object-fit: cover;")
+                                else
+                                    img.rounded-circle.mb-3(src=`/img/guias/${resultado.guiaTuristico.foto}`, alt=`Foto de ${resultado.guiaTuristico.nombre}`, style="width: 150px; height: 150px; object-fit: cover;")
+                            .text-center.mb-3
+                                h4.h5= `${resultado.guiaTuristico.nombre} ${resultado.guiaTuristico.apellido}`
+                                p.text-muted= `${resultado.guiaTuristico.experiencia_anos} años de experiencia`
+                            p
+                                i.fas.fa-language.me-2
+                                | Idiomas: #{resultado.guiaTuristico.idiomas}
+                            p
+                                i.fas.fa-envelope.me-2
+                                | #{resultado.guiaTuristico.email}
+                            p
+                                i.fas.fa-phone.me-2
+                                | #{resultado.guiaTuristico.telefono}
+
+                // Información del Hotel
+                if resultado.hotel
+                    .card
+                        if resultado.hotel.imagen
+                            // Manejo condicional para la imagen del hotel
+                            if resultado.hotel.imagen.startsWith('http')
+                                img.card-img-top(src=resultado.hotel.imagen, alt=`Foto de ${resultado.hotel.nombre}`)
+                            else
+                                img.card-img-top(src=`/img/hoteles/${resultado.hotel.imagen}`, alt=`Foto de ${resultado.hotel.nombre}`)
+                        .card-body
+                            h3.card-title.h4.mb-3 Alojamiento
+                            h4.h5= resultado.hotel.nombre
+                            .mb-3
+                                - var estrellas = resultado.hotel.estrellas
+                                while estrellas > 0
+                                    i.fas.fa-star.text-warning
+                                    - estrellas--
+                            p
+                                i.fas.fa-map-marker-alt.me-2
+                                | #{resultado.hotel.direccion}, #{resultado.hotel.ciudad}, #{resultado.hotel.pais}
+                            p
+                                i.fas.fa-phone.me-2
+                                | #{resultado.hotel.telefono}
+                            p
+                                i.fas.fa-envelope.me-2
+                                | #{resultado.hotel.email}
+                            if resultado.hotel.sitio_web
+                                p
+                                    i.fas.fa-globe.me-2
+                                    a(href=resultado.hotel.sitio_web, target="_blank") Visitar sitio web
+                            if resultado.hotel.servicios
+                                h5.mt-3 Servicios
+                                p= resultado.hotel.servicios

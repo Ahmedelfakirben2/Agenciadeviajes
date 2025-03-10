@@ -1,0 +1,103 @@
+//- views/admin/crear-viaje.pug
+extends ./layout/index
+
+block contenido
+  main.container.mt-5
+    h1.text-center.mb-5= pagina
+    
+    .row.justify-content-center
+      .col-md-10
+        if errores && errores.length
+          .alert.alert-danger
+            ul.mb-0
+              each error in errores
+                li= error.mensaje
+        
+        .card
+          .card-body
+            form(action="/admin/viajes/crear" method="POST" enctype="multipart/form-data")
+              .row.mb-3
+                .col-md-6
+                  label.form-label(for="titulo") Título
+                  input#titulo.form-control(type="text" name="titulo" placeholder="Título del viaje" value=viaje ? viaje.titulo : '' required)
+                
+                .col-md-6
+                  label.form-label(for="precio") Precio
+                  input#precio.form-control(type="number" name="precio" min="1" step="0.01" placeholder="Precio del viaje" value=viaje ? viaje.precio : '' required)
+              
+              .row.mb-3
+                .col-md-6
+                  label.form-label(for="fecha_ida") Fecha de Ida
+                  input#fecha_ida.form-control(type="date" name="fecha_ida" value=viaje && viaje.fecha_ida ? viaje.fecha_ida : '' required)
+                
+                .col-md-6
+                  label.form-label(for="fecha_vuelta") Fecha de Vuelta
+                  input#fecha_vuelta.form-control(type="date" name="fecha_vuelta" value=viaje && viaje.fecha_vuelta ? viaje.fecha_vuelta : '' required)
+              
+              .row.mb-3
+                .col-md-6
+                  label.form-label(for="disponibles") Plazas Disponibles
+                  input#disponibles.form-control(type="number" name="disponibles" min="1" placeholder="Cantidad de plazas disponibles" value=viaje ? viaje.disponibles : '' required)
+                
+                .col-md-6
+                  label.form-label(for="imagen") Imagen
+                  input#imagen.form-control(type="file" name="imagen" accept="image/*")
+                  small.form-text.text-muted La imagen debe tener un formato JPG, PNG o WEBP y un tamaño máximo de 5MB.
+              
+              .row.mb-3
+    .col-md-6
+        label.form-label(for="imagen") Imagen (Archivo)
+        input#imagen.form-control(type="file" name="imagen" accept="image/*")
+        small.form-text.text-muted La imagen debe tener un formato JPG, PNG o WEBP y un tamaño máximo de 5MB.
+    
+    .col-md-6
+        label.form-label(for="imagen_url") O imagen desde URL
+        input#imagen_url.form-control(type="url" name="imagen_url" placeholder="https://ejemplo.com/imagen.jpg" value=viaje && viaje.imagen && viaje.imagen.startsWith('http') ? viaje.imagen : '')
+        small.form-text.text-muted Pega la URL directa de una imagen desde la web.
+              .mb-3
+                label.form-label(for="descripcion") Descripción
+                textarea#descripcion.form-control(name="descripcion" rows="3" placeholder="Descripción detallada del viaje" required)= viaje ? viaje.descripcion : ''
+              
+              .mb-3
+                label.form-label(for="itinerario") Itinerario
+                textarea#itinerario.form-control(name="itinerario" rows="5" placeholder="Descripción día a día del viaje")= viaje ? viaje.itinerario : ''
+              
+              .mb-3
+                label.form-label(for="puntos_itinerario") Puntos de Itinerario (JSON)
+                textarea#puntos_itinerario.form-control(name="puntos_itinerario" rows="5" placeholder='[{"lat": 31.631794, "lng": -8.008889, "descripcion": "Aeropuerto"}]')= viaje && viaje.puntos_itinerario ? JSON.stringify(viaje.puntos_itinerario, null, 2) : ''
+              
+              .row.mb-3
+                .col-md-6
+                  label.form-label(for="incluye") Incluye
+                  textarea#incluye.form-control(name="incluye" rows="3" placeholder="Lo que incluye el viaje")= viaje ? viaje.incluye : ''
+                
+                .col-md-6
+                  label.form-label(for="no_incluye") No Incluye
+                  textarea#no_incluye.form-control(name="no_incluye" rows="3" placeholder="Lo que no incluye el viaje")= viaje ? viaje.no_incluye : ''
+              
+              .mb-3
+                label.form-label(for="requisitos") Requisitos
+                textarea#requisitos.form-control(name="requisitos" rows="3" placeholder="Requisitos para el viaje")= viaje ? viaje.requisitos : ''
+              
+              .mb-3
+                label.form-label(for="punto_encuentro") Punto de Encuentro
+                input#punto_encuentro.form-control(type="text" name="punto_encuentro" placeholder="Punto de encuentro" value=viaje ? viaje.punto_encuentro : '')
+              
+              .row.mb-3
+                .col-md-6
+                  label.form-label(for="guia_id") Guía Turístico
+                  select#guia_id.form-select(name="guia_id" required)
+                    option(value="") -- Seleccione un guía --
+                    each guia in guias
+                      option(value=guia.id selected=viaje && viaje.guia_id == guia.id) #{guia.nombre} #{guia.apellido}
+                
+                .col-md-6
+                  label.form-label(for="hotel_id") Hotel
+                  select#hotel_id.form-select(name="hotel_id" required)
+                    option(value="") -- Seleccione un hotel --
+                    each hotel in hoteles
+                      option(value=hotel.id selected=viaje && viaje.hotel_id == hotel.id) #{hotel.nombre} (#{hotel.ciudad}, #{hotel.pais})
+              
+              .d-grid.gap-2.col-md-6.mx-auto.mt-4
+                button.btn.btn-primary(type="submit") Guardar Viaje
+                a.btn.btn-secondary(href="/admin/viajes") Cancelar
