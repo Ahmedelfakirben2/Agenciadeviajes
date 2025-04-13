@@ -1,0 +1,25 @@
+extends ./layout/index
+
+block contenido
+  main.container.mt-5
+    h1.text-center.mb-5 Guías Turísticos
+
+    a.btn.btn-primary.mb-3(href="/admin/guias/crear") Agregar Guía
+
+    table.table.table-striped
+      thead
+        tr
+          th Nombre
+          th Apellido
+          th Teléfono
+          th Acciones
+      tbody
+        each guia in guias
+          tr
+            td= guia.nombre
+            td= guia.apellido
+            td= guia.telefono
+            td
+              a.btn.btn-sm.btn-warning(href=`/admin/guias/editar/${guia.id}`) Editar
+              form(action=`/admin/guias/eliminar/${guia.id}` method="POST" style="display: inline-block")
+                button.btn.btn-sm.btn-danger(type="submit") Eliminar

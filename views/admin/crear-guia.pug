@@ -1,0 +1,23 @@
+extends ./layout/index
+
+block contenido
+  main.container.mt-5
+    h1.text-center.mb-5 Crear Guía Turístico
+
+    .row.justify-content-center
+      .col-md-8
+        form(action="/admin/guias/crear" method="POST")
+          .mb-3
+            label.form-label(for="nombre") Nombre
+            input#nombre.form-control(type="text" name="nombre" required)
+          .mb-3
+            label.form-label(for="apellido") Apellido
+            input#apellido.form-control(type="text" name="apellido" required)
+          .mb-3
+            label.form-label(for="telefono") Teléfono
+            input#telefono.form-control(type="text" name="telefono")
+          .mb-3
+            label.form-label(for="email") Email
+            input#email.form-control(type="email" name="email")
+          button.btn.btn-primary(type="submit") Guardar
+          a.btn.btn-secondary(href="/admin/guias") Cancelar

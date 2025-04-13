@@ -1,0 +1,26 @@
+extends ./layout/index
+
+block contenido
+  main.container.mt-5
+    h1.text-center.mb-5 Editar Hotel
+
+    .row.justify-content-center
+      .col-md-8
+        form(action=`/admin/hoteles/editar/${hotel.id}` method="POST")
+          .mb-3
+            label.form-label(for="nombre") Nombre
+            input#nombre.form-control(type="text" name="nombre" value=hotel.nombre required)
+          .mb-3
+            label.form-label(for="direccion") Dirección
+            input#direccion.form-control(type="text" name="direccion" value=hotel.direccion required)
+          .mb-3
+            label.form-label(for="ciudad") Ciudad
+            input#ciudad.form-control(type="text" name="ciudad" value=hotel.ciudad required)
+          .mb-3
+            label.form-label(for="telefono") Teléfono
+            input#telefono.form-control(type="text" name="telefono" value=hotel.telefono)
+          .mb-3
+            label.form-label(for="sitioWeb") Sitio Web
+            input#sitioWeb.form-control(type="text" name="sitioWeb" value=hotel.sitioWeb)
+          button.btn.btn-primary(type="submit") Guardar
+          a.btn.btn-secondary(href="/admin/hoteles") Cancelar

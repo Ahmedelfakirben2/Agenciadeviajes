@@ -1,0 +1,23 @@
+extends ./layout/index
+
+block contenido
+  main.container.mt-5
+    h1.text-center.mb-5 Editar Guía Turístico
+
+    .row.justify-content-center
+      .col-md-8
+        form(action=`/admin/guias/editar/${guia.id}` method="POST")
+          .mb-3
+            label.form-label(for="nombre") Nombre
+            input#nombre.form-control(type="text" name="nombre" value=guia.nombre required)
+          .mb-3
+            label.form-label(for="apellido") Apellido
+            input#apellido.form-control(type="text" name="apellido" value=guia.apellido required)
+          .mb-3
+            label.form-label(for="telefono") Teléfono
+            input#telefono.form-control(type="text" name="telefono" value=guia.telefono)
+          .mb-3
+            label.form-label(for="email") Email
+            input#email.form-control(type="email" name="email" value=guia.email)
+          button.btn.btn-primary(type="submit") Guardar
+          a.btn.btn-secondary(href="/admin/guias") Cancelar

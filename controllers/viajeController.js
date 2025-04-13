@@ -54,20 +54,21 @@ export const formularioCrearViaje = async (req, res) => {
 export const crearViaje = async (req, res) => {
   try {
     // Extraer la información
-    const { 
-      titulo, 
-      precio, 
-      fecha_ida, 
-      fecha_vuelta, 
-      descripcion, 
-      disponibles, 
-      itinerario, 
-      incluye, 
-      no_incluye, 
-      requisitos, 
-      punto_encuentro, 
-      guia_id, 
-      hotel_id 
+    const {
+      titulo,
+      precio,
+      fecha_ida,
+      fecha_vuelta,
+      descripcion,
+      disponibles,
+      itinerario,
+      incluye,
+      no_incluye,
+      requisitos,
+      punto_encuentro,
+      guia_id,
+      hotel_id,
+      puntos_itinerario // Extraer puntos_itinerario
     } = req.body;
     
     // Validar campos requeridos
@@ -102,10 +103,10 @@ export const crearViaje = async (req, res) => {
     const imagen = req.imageUrl || titulo.toLowerCase().replace(/\s+/g, '-');
     
     // Manejar puntos de itinerario (si se enviaron como JSON string)
-    let puntos_itinerario = [];
-    if (req.body.puntos_itinerario) {
+    let parsedPuntosItinerario = [];
+    if (puntos_itinerario) {
       try {
-        puntos_itinerario = JSON.parse(req.body.puntos_itinerario);
+        parsedPuntosItinerario = JSON.parse(puntos_itinerario);
       } catch (error) {
         console.error('Error al parsear puntos_itinerario:', error);
       }
@@ -122,7 +123,7 @@ export const crearViaje = async (req, res) => {
       disponibles,
       slug,
       itinerario,
-      puntos_itinerario,
+      puntos_itinerario: parsedPuntosItinerario, // Usar el valor parseado
       incluye,
       no_incluye,
       requisitos,
@@ -190,20 +191,20 @@ export const actualizarViaje = async (req, res) => {
     }
     
     // Extraer la información
-    const { 
-      titulo, 
-      precio, 
-      fecha_ida, 
-      fecha_vuelta, 
-      descripcion, 
-      disponibles, 
-      itinerario, 
-      incluye, 
-      no_incluye, 
-      requisitos, 
-      punto_encuentro, 
-      guia_id, 
-      hotel_id 
+    const {
+      titulo,
+      precio,
+      fecha_ida,
+      fecha_vuelta,
+      descripcion,
+      disponibles,
+      itinerario,
+      incluye,
+      no_incluye,
+      requisitos,
+      punto_encuentro,
+      guia_id,
+      hotel_id
     } = req.body;
     
     // Validar campos requeridos
@@ -238,8 +239,8 @@ export const actualizarViaje = async (req, res) => {
     const imagen = req.imageUrl || viaje.imagen;
     
     // Actualizar el slug si el título cambió
-    const slug = titulo !== viaje.titulo 
-      ? slugify(titulo, { lower: true }) 
+    const slug = titulo !== viaje.titulo
+      ? slugify(titulo, { lower: true })
       : viaje.slug;
     
     // Manejar puntos de itinerario
