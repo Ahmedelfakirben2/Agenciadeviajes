@@ -31,7 +31,7 @@ db.authenticate()
     });
 
 // Forzar la sincronización de los modelos con la base de datos
-db.sync({ force: true })
+db.sync()
     .then(() => {
         console.log('Base de datos sincronizada. Todas las tablas han sido recreadas.');
         
