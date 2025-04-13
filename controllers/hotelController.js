@@ -1,6 +1,7 @@
 import { Hotel } from '../models/Hotel.js';
 
-exports.obtenerHoteles = async (req, res) => {
+// Ya estaba bien:
+export const obtenerHoteles = async (req, res) => {
   try {
     const hoteles = await Hotel.findAll();
     res.render('admin/hoteles', {
@@ -12,13 +13,15 @@ exports.obtenerHoteles = async (req, res) => {
   }
 };
 
-exports.formularioCrearHotel = (req, res) => {
+// Corregido:
+export const formularioCrearHotel = (req, res) => {
   res.render('admin/crear-hotel', {
     pagina: 'Crear Hotel'
   });
 };
 
-exports.crearHotel = async (req, res) => {
+// Corregido:
+export const crearHotel = async (req, res) => {
   try {
     await Hotel.create(req.body);
     res.redirect('/admin/hoteles');
@@ -27,7 +30,8 @@ exports.crearHotel = async (req, res) => {
   }
 };
 
-exports.formularioEditarHotel = async (req, res) => {
+// Corregido:
+export const formularioEditarHotel = async (req, res) => {
   const { id } = req.params;
   try {
     const hotel = await Hotel.findByPk(id);
@@ -40,7 +44,8 @@ exports.formularioEditarHotel = async (req, res) => {
   }
 };
 
-exports.actualizarHotel = async (req, res) => {
+// Corregido:
+export const actualizarHotel = async (req, res) => {
   const { id } = req.params;
   try {
     await Hotel.update(req.body, {
@@ -54,7 +59,8 @@ exports.actualizarHotel = async (req, res) => {
   }
 };
 
-exports.eliminarHotel = async (req, res) => {
+// Corregido:
+export const eliminarHotel = async (req, res) => {
   const { id } = req.params;
   try {
     await Hotel.destroy({

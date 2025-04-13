@@ -11,24 +11,10 @@ import {
 import { upload, processImage } from '../middlewares/uploadImage.js';
 
 // Importar los controladores de hoteles
-import {
-  obtenerHoteles,
-  formularioCrearHotel,
-  crearHotel,
-  formularioEditarHotel,
-  actualizarHotel,
-  eliminarHotel
-} from '../controllers/hotelController.js';
+import * as hotelController from '../controllers/hotelController.js';
 
 // Importar los controladores de guías turísticos
-import {
-  obtenerGuias,
-  formularioCrearGuia,
-  crearGuia,
-  formularioEditarGuia,
-  actualizarGuia,
-  eliminarGuia
-} from '../controllers/guiaTuristicoController.js';
+import * as guiaTuristicoController from '../controllers/guiaTuristicoController.js';
 
 const router = express.Router();
 
@@ -57,19 +43,19 @@ router.post('/viajes/editar/:id',
 router.post('/viajes/eliminar/:id', eliminarViaje);
 
 // Rutas de administración de hoteles
-router.get('/hoteles', obtenerHoteles);
-router.get('/hoteles/crear', formularioCrearHotel);
-router.post('/hoteles/crear', crearHotel);
-router.get('/hoteles/editar/:id', formularioEditarHotel);
-router.post('/hoteles/editar/:id', actualizarHotel);
-router.post('/hoteles/eliminar/:id', eliminarHotel);
+router.get('/hoteles', hotelController.obtenerHoteles);
+router.get('/hoteles/crear', hotelController.formularioCrearHotel);
+router.post('/hoteles/crear', hotelController.crearHotel);
+router.get('/hoteles/editar/:id', hotelController.formularioEditarHotel);
+router.post('/hoteles/editar/:id', hotelController.actualizarHotel);
+router.post('/hoteles/eliminar/:id', hotelController.eliminarHotel);
 
 // Rutas de administración de guías turísticos
-router.get('/guias', obtenerGuias);
-router.get('/guias/crear', formularioCrearGuia);
-router.post('/guias/crear', crearGuia);
-router.get('/guias/editar/:id', formularioEditarGuia);
-router.post('/guias/editar/:id', actualizarGuia);
-router.post('/guias/eliminar/:id', eliminarGuia);
+router.get('/guias', guiaTuristicoController.obtenerGuias);
+router.get('/guias/crear', guiaTuristicoController.formularioCrearGuia);
+router.post('/guias/crear', guiaTuristicoController.crearGuia);
+router.get('/guias/editar/:id', guiaTuristicoController.formularioEditarGuia);
+router.post('/guias/editar/:id', guiaTuristicoController.actualizarGuia);
+router.post('/guias/eliminar/:id', guiaTuristicoController.eliminarGuia);
 
 export default router;
