@@ -1,0 +1,29 @@
+extends layout/index
+
+block contenido
+    main.container.mt-5
+        h1.text-center.mt-5 #{pagina}
+
+        .row
+            .col-md-12
+                table.table.table-striped
+                    thead
+                        tr
+                            th Nombre
+                            th Correo
+                            th Telefono
+                            th Fecha
+                            th Hora
+                            th Numero de Personas
+                            th Acciones
+                    tbody
+                        each reserva in reservas
+                            tr
+                                td= reserva.nombre
+                                td= reserva.correo
+                                td= reserva.telefono
+                                td= reserva.fecha
+                                td= reserva.hora
+                                td= reserva.numero_personas
+                                td
+                                    a(href="#" class="btn btn-danger btn-sm") Eliminar

@@ -1,0 +1,17 @@
+extends layout/index
+
+block contenido
+    main.container.mt-5
+        h1.text-center.mt-5 #{pagina}
+
+        .row
+            .col-md-3
+                a(href="/admin/viajes" class="btn btn-success btn-block") Viajes
+            .col-md-3
+                a(href="/admin/guias" class="btn btn-success btn-block") Guias
+            .col-md-3
+                a(href="/admin/hoteles" class="btn btn-success btn-block") Hoteles
+            .col-md-3
+                a(href="/admin/testimoniales" class="btn btn-success btn-block") Testimoniales
+            .col-md-3
+                a(href="/admin/reservas" class="btn btn-success btn-block") Reservas
