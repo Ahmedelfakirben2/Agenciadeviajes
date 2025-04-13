@@ -1,4 +1,4 @@
-import Testimonial from '../models/Testimoniales.js';
+import { Testimonial } from '../models/Testimoniales.js';
 
 const paginaTestimoniales = async (req, res) => {
     try {
