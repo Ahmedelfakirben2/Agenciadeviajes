@@ -13,13 +13,13 @@ router.get('/nosotros', paginaController.paginaNosotros );
 // Asegúrate de que paginaReservar esté exportado en paginaController o crea una ruta/controlador específico
 // router.get('/reservar', paginaController.paginaReservar ); 
 
-// Rutas de Viajes (Asumiendo que viajeController exporta estas funciones)
-router.get('/viajes', viajeController.paginaViajes ); // Cambiado de obtenerViajes si paginaViajes es la correcta para la vista pública
-router.get('/viajes/:viaje', viajeController.paginaDetalleViaje ); // Cambiado :slug a :viaje si eso usa el controlador
+// Rutas de Viajes (Asumiendo que paginaController exporta estas funciones para la vista pública)
+router.get('/viajes', paginaController.paginaViajes ); // Usar paginaController para la vista pública
+router.get('/viajes/:viaje', paginaController.paginaDetalleViaje ); // Usar paginaController y el parámetro :viaje
 
 // Rutas de Testimoniales (Asumiendo que testimonialesController exporta estas funciones)
 router.get('/testimoniales', testimonialesController.paginaTestimoniales );
-router.post('/testimoniales', testimonialesController.crearTestimonial );
+router.post('/testimoniales', testimonialesController.crearTestimonial ); // Corregido de guardarTestimonial si crearTestimonial es la correcta
 
 // Usar el router de administración
 router.use('/admin', adminRoutes);
