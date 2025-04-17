@@ -39,7 +39,7 @@ router.get('/nosotros', paginaController.paginaNosotros );
   // Comparar credenciales
   if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
     // Credenciales correctas: Autenticar y redirigir
-    req.session.authUser = true;
+    req.session.authUser = true; // Set authUser to true
     console.log('>>>> Usuario AUTENTICADO con credenciales fijas. Redirigiendo a /admin...');
     res.redirect('/admin');
   } else {
