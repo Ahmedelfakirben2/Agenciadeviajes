@@ -17,7 +17,7 @@ import { Viaje } from '../models/Viaje.js';
 import { GuiaTuristico } from '../models/GuiaTuristico.js';
 import { Hotel } from '../models/Hotel.js';
 import { Reserva } from '../models/Reserva.js';
-import { Testimoniales } from '../models/Testimoniales.js';
+import { Testimonial } from '../models/Testimoniales.js';
 
 const router = express.Router();
 
@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
             GuiaTuristico.count(),
             Hotel.count(),
             Reserva.count(),
-            Testimoniales.count()
+            Testimonial.count()
         ]);
         res.render('admin/dashboard', {
             pagina: 'Panel de Administracion',
