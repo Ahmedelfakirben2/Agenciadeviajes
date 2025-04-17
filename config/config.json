@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "Satec2016C@U",
-    "database": "agencia_viajes",
+    "database": "nombre_de_tu_base_de_datos",
     "host": "localhost",
     "dialect": "mysql"
   }
