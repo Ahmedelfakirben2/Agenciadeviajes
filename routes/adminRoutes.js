@@ -13,6 +13,11 @@ import * as guiaTuristicoController from '../controllers/guiaTuristicoController
 import * as testimonialesController from '../controllers/testimonialesController.js';
 import * as reservaController from '../controllers/reservaController.js';
 import authMiddleware from '../middlewares/authMiddleware.js'; // Importar el middleware de autenticación
+import { Viaje } from '../models/Viaje.js';
+import { GuiaTuristico } from '../models/GuiaTuristico.js';
+import { Hotel } from '../models/Hotel.js';
+import { Reserva } from '../models/Reserva.js';
+import { Testimoniales } from '../models/Testimoniales.js';
 
 const router = express.Router();
 
@@ -23,13 +28,29 @@ console.log('>>>> Middleware de Autenticación Aplicado a /admin'); // Logging p
 // --- RUTAS DE ADMINISTRACIÓN (Ya protegidas por router.use(authMiddleware)) ---
 
 // Ruta principal de administración
-router.get('/', (req, res) => {
-  // Ya no necesitas verificar req.session.authUser aquí, el middleware lo hizo
-  res.render('admin/layout/index', {
-    pagina: 'Panel de Administración'
-    // Puedes pasar datos del usuario si los guardaste en la sesión
-    // user: req.session.user // Ejemplo
-  });
+router.get('/', async (req, res) => {
+    try {
+        const [
+            numViajes,
+            numGuias,
+            numHoteles,
+            numReservas,
+            numTestimoniales
+        ] = await Promise.all([
+            Viaje.count(),
+            GuiaTuristico.count(),
+            Hotel.count(),
+            Reserva.count(),
+            Testimoniales.count()
+        ]);
+        res.render('admin/dashboard', {
+            pagina: 'Panel de Administracion',
+            data: { numViajes, numGuias, numHoteles, numReservas, numTestimoniales }
+        });
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).send("Error al obtener datos del dashboard");
+    }
 });
 
 // Rutas de administración de viajes
