@@ -9,13 +9,27 @@ block contenido
     .row
       each hotel in hoteles
         .col-md-6.col-lg-4.mb-4
-          .card
+          .card.h-100
             if hotel.imagenes && hotel.imagenes.length > 0
-              img.card-img-top(src=`${process.env.BASE_URL}${hotel.imagenes[0]}`, alt=`Imagen de ${hotel.nombre}`)
+              #hotelCarousel(class="carousel slide", data-bs-ride="carousel")
+                .carousel-inner
+                  each imagen, index in hotel.imagenes
+                    .carousel-item(class=(index === 0 ? 'active' : ''))
+                      img.d-block.w-100(src=`${process.env.BASE_URL}${imagen}`, alt=`Imagen ${index + 1} de ${hotel.nombre}`)
+                if hotel.imagenes.length > 1
+                  button.carousel-control-prev(type="button", data-bs-target="#hotelCarousel", data-bs-slide="prev")
+                    span.carousel-control-prev-icon(aria-hidden="true")
+                    span.visually-hidden Previous
+                  button.carousel-control-next(type="button", data-bs-target="#hotelCarousel", data-bs-slide="next")
+                    span.carousel-control-next-icon(aria-hidden="true")
+                    span.visually-hidden Next
             else
               img.card-img-top(src=`${process.env.BASE_URL}/uploads/hoteles/default.jpg`, alt="Imagen por defecto")
             .card-body
               h5.card-title= hotel.nombre
+              p.card-text
+                strong Descripción:
+                |  #{hotel.descripcion ? hotel.descripcion.substring(0, 100) + '...' : 'No especificada'}
               p.card-text
                 strong Dirección:
                 |  #{hotel.direccion}
@@ -30,7 +44,7 @@ block contenido
                 |  #{hotel.telefono || 'No especificado'}
               p.card-text
                 strong Email:
-                |  #{hotel.email || 'No especificado'}
+                |  #{hotel.email ? hotel.email.substring(0, 20) : 'No especificado'}
               p.card-text
                 strong Estrellas:
                 |  #{hotel.estrellas || 'No especificado'}
@@ -41,8 +55,8 @@ block contenido
                   | )
               p.card-text
                 strong Servicios:
-                |  #{hotel.servicios || 'No especificados'}
-              .d-flex.justify-content-between
+                |  #{hotel.servicios ? hotel.servicios.substring(0, 50) + '...' : 'No especificados'}
+              .card-footer.d-flex.justify-content-between
                 a.btn.btn-sm.btn-warning(href=`/admin/hoteles/editar/${hotel.id}`) Editar
                 form(action=`/admin/hoteles/eliminar/${hotel.id}` method="POST")
                   button.btn.btn-sm.btn-danger(type="submit") Eliminar

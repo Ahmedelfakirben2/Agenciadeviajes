@@ -41,10 +41,12 @@ export const Hotel = db.define('hoteles', {
         type: Sequelize.STRING,
         allowNull: true
     },
-    imagen: {
-        type: Sequelize.STRING,
-        allowNull: true
-    },
+    imagenes: {
+        type: Sequelize.TEXT, // Almacena un array de strings como texto
+        allowNull: true,
+        get: function() { return this.getDataValue('imagenes') ? JSON.parse(this.getDataValue('imagenes')) : []; },
+        set: function(value) { this.setDataValue('imagenes', JSON.stringify(value)); }
+    },    
     servicios: {
         type: Sequelize.TEXT,
         allowNull: true
