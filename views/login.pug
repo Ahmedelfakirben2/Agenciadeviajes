@@ -1,2 +1,22 @@
---- a/views/login.pug
-+++ b/views/login.pug
+pug
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Iniciar Sesión
+  body
+    h1 Iniciar Sesión
+
+    // Mostrar mensaje de error si existe
+    if error
+      p(style='color: red;')= error
+
+    form(action='/login', method='post')
+      div
+        label(for='email') Email:
+        input(type='email', id='email', name='email', required)
+      div
+        label(for='password') Contraseña:
+        input(type='password', id='password', name='password', required)
+      button(type='submit') Iniciar Sesión
