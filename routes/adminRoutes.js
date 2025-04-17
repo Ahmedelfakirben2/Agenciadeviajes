@@ -25,7 +25,7 @@ console.log('>>>> Middleware de Autenticación Aplicado a /admin'); // Logging p
 // Ruta principal de administración
 router.get('/', (req, res) => {
   // Ya no necesitas verificar req.session.authUser aquí, el middleware lo hizo
-  res.render('admin/index', {
+  res.render('admin/layout/index', {
     pagina: 'Panel de Administración'
     // Puedes pasar datos del usuario si los guardaste en la sesión
     // user: req.session.user // Ejemplo
