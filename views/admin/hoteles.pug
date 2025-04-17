@@ -6,43 +6,43 @@ block contenido
 
     a.btn.btn-primary.mb-3(href="/admin/hoteles/crear") Agregar Hotel
 
-.row
-  each hotel in hoteles
-    .col-md-6.col-lg-4.mb-4
-      .card
-        if hotel.imagenes && hotel.imagenes.length > 0
-          img.card-img-top(src=`${process.env.BASE_URL}${hotel.imagenes[0]}`, alt=`Imagen de ${hotel.nombre}`)
-        else
-          img.card-img-top(src=`${process.env.BASE_URL}/uploads/hoteles/default.jpg`, alt="Imagen por defecto")
-        .card-body
-          h5.card-title= hotel.nombre
-          p.card-text
-            strong Dirección:
-            |  #{hotel.direccion}
-          p.card-text
-            strong Ciudad:
-            |  #{hotel.ciudad}
-          p.card-text
-            strong País:
-            |  #{hotel.pais || 'No especificado'}
-          p.card-text
-            strong Teléfono:
-            |  #{hotel.telefono || 'No especificado'}
-          p.card-text
-            strong Email:
-            |  #{hotel.email || 'No especificado'}
-          p.card-text
-            strong Estrellas:
-            |  #{hotel.estrellas || 'No especificado'}
-            if hotel.estrellas
-              |  (
-              each star in Array.from({ length: hotel.estrellas })
-                i.fas.fa-star.text-warning
-              | )
-          p.card-text
-            strong Servicios:
-            |  #{hotel.servicios || 'No especificados'}
-          .d-flex.justify-content-between
-            a.btn.btn-sm.btn-warning(href=`/admin/hoteles/editar/${hotel.id}`) Editar
-            form(action=`/admin/hoteles/eliminar/${hotel.id}` method="POST")
-              button.btn.btn-sm.btn-danger(type="submit") Eliminar
+    .row
+      each hotel in hoteles
+        .col-md-6.col-lg-4.mb-4
+          .card
+            if hotel.imagenes && hotel.imagenes.length > 0
+              img.card-img-top(src=`${process.env.BASE_URL}${hotel.imagenes[0]}`, alt=`Imagen de ${hotel.nombre}`)
+            else
+              img.card-img-top(src=`${process.env.BASE_URL}/uploads/hoteles/default.jpg`, alt="Imagen por defecto")
+            .card-body
+              h5.card-title= hotel.nombre
+              p.card-text
+                strong Dirección:
+                |  #{hotel.direccion}
+              p.card-text
+                strong Ciudad:
+                |  #{hotel.ciudad}
+              p.card-text
+                strong País:
+                |  #{hotel.pais || 'No especificado'}
+              p.card-text
+                strong Teléfono:
+                |  #{hotel.telefono || 'No especificado'}
+              p.card-text
+                strong Email:
+                |  #{hotel.email || 'No especificado'}
+              p.card-text
+                strong Estrellas:
+                |  #{hotel.estrellas || 'No especificado'}
+                if hotel.estrellas
+                  |  (
+                  each star in Array.from({ length: hotel.estrellas })
+                    i.fas.fa-star.text-warning
+                  | )
+              p.card-text
+                strong Servicios:
+                |  #{hotel.servicios || 'No especificados'}
+              .d-flex.justify-content-between
+                a.btn.btn-sm.btn-warning(href=`/admin/hoteles/editar/${hotel.id}`) Editar
+                form(action=`/admin/hoteles/eliminar/${hotel.id}` method="POST")
+                  button.btn.btn-sm.btn-danger(type="submit") Eliminar
