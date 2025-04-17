@@ -17,6 +17,11 @@ export const obtenerViajes = async (req, res) => {
         { model: GuiaTuristico },
         { model: Hotel }
       ]
+    });    
+
+    // Verificar si existe el campo imagenes, si no existe, retornar un array vacio
+    viajes.forEach(viaje => {
+      viaje.imagenes = viaje.imagenes || [];
     });
     
     res.render('admin/viajes', {
