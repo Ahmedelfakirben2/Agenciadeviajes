@@ -6,7 +6,7 @@ block contenido
 
     .row.justify-content-center
       .col-md-8
-        form(action="/admin/guias/crear" method="POST")
+        form(action="/admin/guias/crear" method="POST" enctype="multipart/form-data")
           .mb-3
             label.form-label(for="nombre") Nombre
             input#nombre.form-control(type="text" name="nombre" required)
@@ -19,5 +19,14 @@ block contenido
           .mb-3
             label.form-label(for="email") Email
             input#email.form-control(type="email" name="email")
+          .mb-3
+            label.form-label(for="experiencia_anos") Años de Experiencia
+            input#experiencia_anos.form-control(type="number" name="experiencia_anos" min="0")
+          .mb-3
+            label.form-label(for="idiomas") Idiomas (separados por comas)
+            input#idiomas.form-control(type="text" name="idiomas")
+          .mb-3
+            label.form-label(for="foto") Foto
+            input#foto.form-control(type="file" name="foto" accept="image/*")
           button.btn.btn-primary(type="submit") Guardar
           a.btn.btn-secondary(href="/admin/guias") Cancelar

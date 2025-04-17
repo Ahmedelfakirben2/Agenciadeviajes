@@ -8,7 +8,7 @@ import {
   actualizarViaje,
   eliminarViaje
 } from '../controllers/viajeController.js';
-import { upload, processImage } from '../middlewares/uploadImage.js';
+import { getUpload } from '../middlewares/uploadImage.js';
 import * as hotelController from '../controllers/hotelController.js';
 import * as guiaTuristicoController from '../controllers/guiaTuristicoController.js';
 import * as testimonialesController from '../controllers/testimonialesController.js';
@@ -36,25 +36,15 @@ router.get('/', (req, res) => {
 // Rutas de administración de viajes
 router.get('/viajes', obtenerViajes); // No necesita 'authMiddleware' individualmente
 router.get('/viajes/crear', formularioCrearViaje);
-router.post('/viajes/crear',
-  upload.single('imagen'),
-  (req, res, next) => { req.params.category = 'viajes'; next(); },
-  processImage,
-  crearViaje
-);
+router.post('/viajes/crear', getUpload('viajes').single('imagen'), crearViaje);
 router.get('/viajes/editar/:id', formularioEditarViaje);
-router.post('/viajes/editar/:id',
-  upload.single('imagen'),
-  (req, res, next) => { req.params.category = 'viajes'; next(); },
-  processImage,
-  actualizarViaje
-);
+router.post('/viajes/editar/:id', getUpload('viajes').single('imagen'), actualizarViaje);
 router.post('/viajes/eliminar/:id', eliminarViaje);
 
 // Rutas de administración de hoteles
 router.get('/hoteles', hotelController.obtenerHoteles); // No necesita 'authMiddleware' individualmente
 router.get('/hoteles/crear', hotelController.formularioCrearHotel);
-router.post('/hoteles/crear', hotelController.crearHotel);
+router.post('/hoteles/crear', getUpload('hoteles').array('imagenes', 10), hotelController.crearHotel); // Allow up to 10 images
 router.get('/hoteles/editar/:id', hotelController.formularioEditarHotel);
 router.post('/hoteles/editar/:id', hotelController.actualizarHotel);
 router.post('/hoteles/eliminar/:id', hotelController.eliminarHotel);
@@ -62,7 +52,7 @@ router.post('/hoteles/eliminar/:id', hotelController.eliminarHotel);
 // Rutas de administración de guías turísticos
 router.get('/guias', guiaTuristicoController.obtenerGuias); // No necesita 'authMiddleware' individualmente
 router.get('/guias/crear', guiaTuristicoController.formularioCrearGuia);
-router.post('/guias/crear', guiaTuristicoController.crearGuia);
+router.post('/guias/crear', getUpload('guias').single('imagen'), guiaTuristicoController.crearGuia);
 router.get('/guias/editar/:id', guiaTuristicoController.formularioEditarGuia);
 router.post('/guias/editar/:id', guiaTuristicoController.actualizarGuia);
 router.post('/guias/eliminar/:id', guiaTuristicoController.eliminarGuia);

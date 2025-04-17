@@ -6,7 +6,7 @@ block contenido
 
     .row.justify-content-center
       .col-md-8
-        form(action="/admin/hoteles/crear" method="POST")
+        form(action="/admin/hoteles/crear" method="POST" enctype="multipart/form-data")
           .mb-3
             label.form-label(for="nombre") Nombre
             input#nombre.form-control(type="text" name="nombre" required)
@@ -17,10 +17,26 @@ block contenido
             label.form-label(for="ciudad") Ciudad
             input#ciudad.form-control(type="text" name="ciudad" required)
           .mb-3
+            label.form-label(for="pais") País
+            input#pais.form-control(type="text" name="pais" required)
+          .mb-3
             label.form-label(for="telefono") Teléfono
             input#telefono.form-control(type="text" name="telefono")
           .mb-3
+            label.form-label(for="email") Email
+            input#email.form-control(type="email" name="email")
+          .mb-3
             label.form-label(for="sitioWeb") Sitio Web
             input#sitioWeb.form-control(type="text" name="sitioWeb")
+          .mb-3
+            label.form-label(for="estrellas") Estrellas (1-5)
+            input#estrellas.form-control(type="number" name="estrellas" min="1" max="5")
+          .mb-3
+            label.form-label(for="servicios") Servicios (separados por comas)
+            input#servicios.form-control(type="text" name="servicios")
+          .mb-3
+            label.form-label(for="imagenes") Imágenes
+            input#imagenes.form-control(type="file" name="imagenes" multiple)
+            small.form-text.text-muted Puedes seleccionar varias imágenes.
           button.btn.btn-primary(type="submit") Guardar
           a.btn.btn-secondary(href="/admin/hoteles") Cancelar
