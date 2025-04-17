@@ -177,7 +177,7 @@ export const crearViaje = async (req, res) => {
       hotel_id,
       imagenes
         });
-        
+
         res.redirect('/admin/viajes');
       } catch (error) {
         console.log(error);
@@ -185,8 +185,7 @@ export const crearViaje = async (req, res) => {
           pagina: 'Crear Nuevo Viaje',
           errores: [{ msg: 'Error al guardar el viaje. Por favor, intenta de nuevo.' }],
           // Asegúrate de que guias y hoteles están definidos incluso en caso de error
-          guias: guias || [],
-          hoteles: hoteles || [],
+          ... (await Promise.all([GuiaTuristico.findAll(), Hotel.findAll()]).then(([guias, hoteles]) => ({ guias, hoteles }))),
           viaje: req.body
         });
       }
