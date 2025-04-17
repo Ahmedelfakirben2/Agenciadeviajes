@@ -1,32 +1,31 @@
-pug
 extends layout/index
 
 block contenido
-    main.container.mt-5
-        h1.text-center.mt-5 #{pagina}
-        .row
-            .col-md-4
-                .card.bg-primary.text-white.mb-4
-                    .card-body
-                        h5.card-title Viajes
-                        p.card-text #{data.numViajes}
-            .col-md-4
-                .card.bg-success.text-white.mb-4
-                    .card-body
-                        h5.card-title Guias
-                        p.card-text #{data.numGuias}
-            .col-md-4
-                .card.bg-warning.text-white.mb-4
-                    .card-body
-                        h5.card-title Hoteles
-                        p.card-text #{data.numHoteles}
-            .col-md-4
-                .card.bg-danger.text-white.mb-4
-                    .card-body
-                        h5.card-title Reservas
-                        p.card-text #{data.numReservas}
-            .col-md-4
-                .card.bg-info.text-white.mb-4
-                    .card-body
-                        h5.card-title Testimoniales
-                        p.card-text #{data.numTestimoniales}
+  main.container.mt-5
+    h1.text-center.mt-5 #{pagina}
+    .row
+      .col-md-4
+        .card.bg-primary.text-white.mb-4
+          .card-body
+            h5.card-title Viajes
+            p.card-text #{data.numViajes}
+      .col-md-4
+        .card.bg-success.text-white.mb-4
+          .card-body
+            h5.card-title Guias
+            p.card-text #{data.numGuias}
+      .col-md-4
+        .card.bg-warning.text-white.mb-4
+          .card-body
+            h5.card-title Hoteles
+            p.card-text #{data.numHoteles}
+      .col-md-4
+        .card.bg-danger.text-white.mb-4
+          .card-body
+            h5.card-title Reservas
+            p.card-text #{data.numReservas}
+      .col-md-4
+        .card.bg-info.text-white.mb-4
+          .card-body
+            h5.card-title Testimoniales
+            p.card-text #{data.numTestimoniales}
