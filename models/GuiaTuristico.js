@@ -34,4 +34,3 @@ const GuiaTuristico = db.define('guias_turisticos', {
         allowNull: true
     }});
 export { GuiaTuristico };
-export { GuiaTuristico };
