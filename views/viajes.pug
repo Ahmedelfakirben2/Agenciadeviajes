@@ -2,6 +2,32 @@ extends ./layout/index
 
 block contenido
 
-    h1(class="mt-5 text-center")= pagina
     main.container.mt-5
-        include ./layout/bloque_viajes
+      h1.mt-5.text-center= pagina
+      
+      .row
+        each viaje in viajes
+          .col-md-4.mb-4
+            .card
+              if viaje.imagenes && viaje.imagenes.length > 0
+                img.card-img-top(src=viaje.imagenes[0], alt=`Imagen de ${viaje.titulo}`)
+              else
+                img.card-img-top(src="/public/img/logo.svg", alt="Imagen por defecto")
+              .card-body
+                h5.card-title= viaje.titulo
+                p.card-text= `${viaje.descripcion.substr(0, 100)}...`
+                p.card-text
+                  i.fas.fa-calendar-alt.me-2
+                  | #{new Date(viaje.fecha_ida).toLocaleDateString()} - #{new Date(viaje.fecha_vuelta).toLocaleDateString()}
+                p.card-text
+                  i.fas.fa-money-bill-wave.me-2
+                  | Precio: #{viaje.precio} DH
+                p.card-text
+                  i.fas.fa-users.me-2
+                  | Disponibles: #{viaje.disponibles}
+                a.btn.btn-primary(href=`/viajes/${viaje.slug}`) Ver detalles
+        else
+          p.text-center No hay viajes disponibles actualmente.
+      
+      //- Incluir el bloque de viajes si es necesario (ya se muestra la lista arriba)
+      //- include ./layout/bloque_viajes

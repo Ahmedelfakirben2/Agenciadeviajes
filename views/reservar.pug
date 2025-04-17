@@ -6,7 +6,18 @@ block contenido
         
         .row
             .col-md-6
-                img(src=`/img/destinos_${viaje.imagen}.jpg`, alt=`imagen de ${viaje.titulo}`, class="img-fluid")
+                if viaje.imagenes && viaje.imagenes.length > 0
+                    .row
+                        each imagen in viaje.imagenes
+                            .col-md-4.mb-3
+                                img(src=imagen, alt=`Imagen de ${viaje.titulo}`, class="img-fluid")
+                else
+                    img(src="/public/img/logo.svg", alt="Imagen por defecto", class="img-fluid")
+                //- if viaje.imagenes && viaje.imagenes.length > 0
+                //-     img(src=viaje.imagenes[0], alt=`imagen de ${viaje.titulo}`, class="img-fluid")
+                //- else 
+                //-     img(src=`/img/destinos_${viaje.imagen}.jpg`, alt=`imagen de ${viaje.titulo}`, class="img-fluid")
+                    
                 .card.mt-4
                     .card-body
                         h2.card-title Detalles del Viaje

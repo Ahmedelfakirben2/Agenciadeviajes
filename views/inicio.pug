@@ -7,6 +7,20 @@ block slider
 
 block contenido
     main.container.mt-5
+        h2.text-center.m-5 Nos Voyages
+        .row.mt-5
+            each viaje in viajes
+                .col-md-4.mb-4
+                    .card
+                        if viaje.imagenes && viaje.imagenes.length > 0
+                            each imagen in viaje.imagenes.slice(0, 1)
+                                img.card-img-top(src=imagen, alt=`Image de ${viaje.titulo}`)
+                        else
+                            img.card-img-top(src='/img/logo.svg', alt='Image par défaut')
+                        .card-body
+                            h5.card-title= viaje.titulo
+                            p.card-text= `${viaje.descripcion.substr(0, 100)}...`
+                            a.btn.btn-primary(href=`/viajes/${viaje.slug}`) Plus d'informations
     h2.text-center.m-5 Qui somme nous
         .row.mt-5 
             .col-md-6.mb-5 
@@ -21,21 +35,3 @@ block contenido
                     span Voyagez avec nous et découvrez un monde de possibilités !
             .col-md-6
                 img(src='/img/inicio_nosotros.jpg', alt="imagen nosotros", class="img-fluid")
-
-        include ./layout/bloque_viajes
-
-    .descuento
-        .container
-            .row 
-                .col-md-6
-                    .contenido 
-                        h3 5% de reduction 
-                        p.titulo Voyage a Portugal 
-                        p.fecha 20 de Marzo - 28 de Marzo de 2025
-                        p.precio 7500 DH 
-
-    h3.text-center.mt-5 Testimoniales
-    include ./layout/bloque_testimoniales
-    script.
-        window.viajesEvents = !{viajesEvents};
-    script(src="/js/calendario.js")

@@ -4,12 +4,11 @@ block contenido
     main.container.mt-5
         .row
             .col-md-8
-                // Imagen actualizada para manejar tanto URLs como nombres de archivo
-                if resultado.imagen && resultado.imagen.startsWith('http')
-                    img(src=resultado.imagen, alt=`Imagen de ${resultado.titulo}`, class="img-fluid")
-                else
-                    img(src=`/uploads/viajes/${resultado.imagen}`, alt=`Imagen de ${resultado.titulo}`, class="img-fluid")
-                
+                // Display all images
+                if resultado.imagenes && resultado.imagenes.length > 0
+                    .row
+                        each imagen in resultado.imagenes
+                            img(src=imagen, alt=`Imagen de ${resultado.titulo}`, class="img-fluid mb-3")
                 .card.mt-4
                     .card-body
                         h1.card-title= resultado.titulo
