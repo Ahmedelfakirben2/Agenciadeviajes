@@ -1,0 +1,21 @@
+pug
+extends ../layout/index
+
+block contenido
+    main.container.mt-5
+        h1.text-center.mb-5= pagina
+        .row.justify-content-center
+            .col-md-8
+                if errores
+                    each error in errores
+                        .alert.alert-danger.text-center= error.mensaje
+
+                form(method="POST" enctype="multipart/form-data")
+                    .mb-3
+                        label.form-label(for="anuncio") Anuncio
+                        textarea#anuncio.form-control(name="anuncio" rows="3")= oferta ? oferta.anuncio : ''
+                    .mb-3
+                        label.form-label(for="imagen") Imagen
+                        input#imagen.form-control(type="file", name="imagen")
+
+                    input.btn.btn-primary(type="submit", value="Crear Oferta")

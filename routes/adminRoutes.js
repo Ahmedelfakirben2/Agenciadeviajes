@@ -13,6 +13,7 @@ import * as guiaTuristicoController from '../controllers/guiaTuristicoController
 import * as testimonialesController from '../controllers/testimonialesController.js';
 import * as reservaController from '../controllers/reservaController.js';
 import authMiddleware from '../middlewares/authMiddleware.js'; // Importar el middleware de autenticación
+import * as ofertaController from '../controllers/ofertaController.js';
 import { Viaje } from '../models/Viaje.js';
 import { GuiaTuristico } from '../models/GuiaTuristico.js';
 import { Hotel } from '../models/Hotel.js';
@@ -82,6 +83,15 @@ router.get('/testimoniales', testimonialesController.paginaTestimonialesAdmin);
 
 // Rutas de administración de reservas
 router.get('/reservas', reservaController.obtenerReservasAdmin);
+
+// Rutas de administración de ofertas
+router.get('/ofertas', ofertaController.obtenerOfertas);
+router.get('/ofertas/crear', ofertaController.formularioCrearOferta);
+router.post('/ofertas/crear', ofertaController.crearOferta);
+router.get('/ofertas/editar/:id', ofertaController.formularioEditarOferta);
+router.post('/ofertas/editar/:id', ofertaController.actualizarOferta);
+router.post('/ofertas/eliminar/:id', ofertaController.eliminarOferta);
+
 
 // --- Ya NO es necesario importar authMiddleware ni usar router.use aquí al final ---
 
