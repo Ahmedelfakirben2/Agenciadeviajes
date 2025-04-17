@@ -20,9 +20,16 @@ const Viaje = db.define('viajes', {
         type: Sequelize.DATE,
         allowNull: false
     },
-    imagen: {
-        type: Sequelize.STRING,
-        allowNull: false
+    imagenes: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: true,
+        get() {
+            const value = this.getDataValue('imagenes');
+            return value ? value : [];
+        },
+        set(value) {
+            this.setDataValue('imagenes', value);
+        }
     },
     descripcion: {
         type: Sequelize.TEXT,

@@ -158,6 +158,11 @@ export const crearViaje = async (req, res) => {
             console.error("Error processing images:", error);
         }
 
+        // Validar que se haya subido al menos una imagen
+        if (imagenes.length === 0) {
+          errores.push({ mensaje: 'Debes subir al menos una imagen para el viaje' });
+        }
+
         // Crear el viaje
         await Viaje.create({
           titulo,
