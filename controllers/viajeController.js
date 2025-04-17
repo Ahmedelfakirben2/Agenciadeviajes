@@ -172,7 +172,7 @@ export const crearViaje = async (req, res) => {
             guia_id,
             hotel_id,
         });
-
+        
         res.redirect('/admin/viajes');
       } catch (error) {
         console.log(error);
