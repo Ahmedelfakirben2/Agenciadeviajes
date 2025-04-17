@@ -20,6 +20,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+
 // Establecer BASE_URL para las imágenes
 const port = process.env.PORT || 4000;
 process.env.BASE_URL = process.env.BASE_URL || `http://localhost:${port}`;
@@ -52,7 +53,7 @@ db.sync()
         return Hotel.create({
             nombre: 'Hotel Riad Marrakech',
             direccion: 'Medina 123',
-            ciudad: 'Marrakech',
+            ciudad: 'Marrake1ch',
             pais: 'Marruecos',
             estrellas: 5,
             telefono: '+212 524-555-666',
@@ -80,7 +81,7 @@ db.sync()
                     },
                     {
                         lat: 31.631111,
-                        lng: -7.984167,
+                        lng: -7.9841617,
                         descripcion: 'Hotel Riad Marrakech'
                     },
                     {
@@ -132,6 +133,7 @@ app.use((req, res, next) => {
     next();
 });
 
+
 // Agregar body parser para leer los datos del formulario
 app.use(express.urlencoded({ extended: true }));
 
@@ -149,6 +151,7 @@ const hotelesDir = path.join(uploadsDir, 'hoteles');
         fs.mkdirSync(dir, { recursive: true });
     }
 });
+
 
 // Agregar routers
 app.use('/', router);
