@@ -8,7 +8,7 @@ block contenido
                 if resultado.imagen && resultado.imagen.startsWith('http')
                     img(src=resultado.imagen, alt=`Imagen de ${resultado.titulo}`, class="img-fluid")
                 else
-                    img(src=`/img/destinos_${resultado.imagen}.jpg`, alt=`Imagen de ${resultado.titulo}`, class="img-fluid")
+                    img(src=`/uploads/viajes/${resultado.imagen}`, alt=`Imagen de ${resultado.titulo}`, class="img-fluid")
                 
                 .card.mt-4
                     .card-body

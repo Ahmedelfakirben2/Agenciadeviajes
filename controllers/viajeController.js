@@ -100,7 +100,12 @@ export const crearViaje = async (req, res) => {
     const slug = slugify(titulo, { lower: true });
     
     // Si se subió una imagen, usar la URL generada, si no, usar el nombre para la imagen por defecto
-    const imagen = req.imageUrl || titulo.toLowerCase().replace(/\s+/g, '-');
+    let imagen;
+    if (req.imageUrl) {
+      imagen = req.imageUrl;
+    } else {
+      imagen = `${slug}.jpg`; // Use slug for the default image name
+    }
     
     // Manejar puntos de itinerario (si se enviaron como JSON string)
     let parsedPuntosItinerario = [];

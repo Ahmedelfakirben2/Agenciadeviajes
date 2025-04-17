@@ -2,7 +2,11 @@
     each viaje in viajes 
         .col-md-6.col-lg-4.mb-4
             .card
-                img.card-img-top(src=`img/destinos_${viaje.imagen}.jpg`)
+                // Updated image path to handle both URLs and local paths
+                if viaje.imagen && viaje.imagen.startsWith('http')
+                    img.card-img-top(src=viaje.imagen, alt=`Imagen de ${viaje.titulo}`)
+                else
+                    img.card-img-top(src=`/uploads/viajes/${viaje.imagen}`, alt=`Imagen de ${viaje.titulo}`)
                 .card-body
                     h2= viaje.titulo
                     p
