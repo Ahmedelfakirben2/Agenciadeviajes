@@ -7,6 +7,7 @@ import multer from 'multer';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import sharp from 'sharp';
+import fs from 'fs';
 
 // Obtener todos los viajes
 export const obtenerViajes = async (req, res) => {
@@ -183,8 +184,10 @@ export const crearViaje = async (req, res) => {
         return res.render('admin/crear-viaje', {
           pagina: 'Crear Nuevo Viaje',
           errores: [{ msg: 'Error al guardar el viaje. Por favor, intenta de nuevo.' }],
-          guias,
-          hoteles
+          // Asegúrate de que guias y hoteles están definidos incluso en caso de error
+          guias: guias || [],
+          hoteles: hoteles || [],
+          viaje: req.body
         });
       }
     });
