@@ -15,7 +15,7 @@ block contenido
         
         .card
           .card-body
-            form(action="/admin/viajes/crear" method="POST")
+            form(action="/admin/viajes/crear" method="POST", enctype="multipart/form-data")
               .row.mb-3
                 .col-md-6
                   label.form-label(for="titulo") Título
@@ -39,10 +39,9 @@ block contenido
                   label.form-label(for="disponibles") Plazas Disponibles
                   input#disponibles.form-control(type="number" name="disponibles" min="1" placeholder="Cantidad de plazas disponibles" value=viaje ? viaje.disponibles : '' required)
                 .col-md-6
-                  label.form-label(for="imagen") Imagen (URL)
-                  input#imagen.form-control(type="url" name="imagen" placeholder="URL de la imagen" value=viaje ? viaje.imagen : '' )
-                  small.form-text.text-muted Pega la URL directa de una imagen desde la web.
-              
+                  label.form-label(for="imagen") Imágenes
+                  input#imagen.form-control(type="file" name="imagenes" multiple)
+                  small.form-text.text-muted Selecciona una o varias imágenes para el viaje.
               .mb-3
                 label.form-label(for="descripcion") Descripción
                 textarea#descripcion.form-control(name="descripcion" rows="3" placeholder="Descripción detallada del viaje" required)= viaje ? viaje.descripcion : ''
