@@ -25,10 +25,13 @@ block contenido
             each viaje in viajes
               tr
                 td
-                  if viaje.imagen.startsWith('http')
-                    img.img-thumbnail(src=viaje.imagen alt=viaje.titulo width="100")
-                  else
-                    img.img-thumbnail(src=`/img/destinos_${viaje.imagen}.jpg` alt=viaje.titulo width="100")
+                  if viaje.imagenes && viaje.imagenes.length > 0 && viaje.imagenes[0].startsWith('http')
+                    if viaje.imagenes[0].startsWith('http')
+                      img.img-thumbnail(src=viaje.imagenes[0] alt=viaje.titulo width="100")
+                    else
+                      img.img-thumbnail(src=`/img/destinos_${viaje.imagenes[0]}.jpg` alt=viaje.titulo width="100")
+                  else 
+                    img.img-thumbnail(src="/img/0.jpg" alt="Sin imagen" width="100")
                 td= viaje.titulo
                 td= viaje.precio.toFixed(2) + ' DH'
                 td
