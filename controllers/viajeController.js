@@ -149,6 +149,8 @@ export const crearViaje = async (req, res) => {
 
             return `/uploads/viajes/${uniqueFilename}`;
           }));
+        } catch (error) {
+          console.error("Error processing images:", error);
         }
 
           // Crear el viaje
