@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import session from 'express-session';
 
 // Configurar variables de entorno
 dotenv.config();

@@ -1,5 +1,6 @@
 // routes/index.js
 import express from 'express';
+import session from 'express-session';
 import * as paginaController from '../controllers/paginaController.js';
 import * as viajeController from '../controllers/viajeController.js';
 import * as testimonialesController from '../controllers/testimonialesController.js';
@@ -23,5 +24,21 @@ router.post('/testimoniales', testimonialesController.crearTestimonial ); // Cor
 
 // Usar el router de administración
 router.use('/admin', adminRoutes);
+
+// Configurar express-session (esto debe estar en tu app principal, pero lo agregamos aquí para el ejemplo)
+router.use(session({
+    secret: 'tu_secreto_seguro', // Cambia esto por un secreto seguro real
+    resave: false,
+    saveUninitialized: false,
+}));
+
+router.post('/login', (req, res) => {
+    req.session.authUser = true; // Simulamos una autenticación exitosa
+    res.redirect('/admin');
+});
+
+router.get('/login', (req, res) => {
+    res.render('login'); // Renderiza la vista login.pug
+});
 
 export default router;

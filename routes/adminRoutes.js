@@ -32,7 +32,7 @@ router.get('/', (req, res) => {
 });
 
 // Rutas de administración de viajes
-router.get('/viajes', obtenerViajes);
+router.get('/viajes',authMiddleware, obtenerViajes);
 router.get('/viajes/crear', formularioCrearViaje);
 router.post('/viajes/crear',
   upload.single('imagen'), // Ahora es opcional porque podemos usar URL
@@ -56,7 +56,7 @@ router.post('/viajes/editar/:id',
 router.post('/viajes/eliminar/:id', eliminarViaje);
 
 // Rutas de administración de hoteles
-router.get('/hoteles', hotelController.obtenerHoteles);
+router.get('/hoteles',authMiddleware, hotelController.obtenerHoteles);
 router.get('/hoteles/crear', hotelController.formularioCrearHotel);
 router.post('/hoteles/crear', hotelController.crearHotel);
 router.get('/hoteles/editar/:id', hotelController.formularioEditarHotel);
@@ -64,7 +64,7 @@ router.post('/hoteles/editar/:id', hotelController.actualizarHotel);
 router.post('/hoteles/eliminar/:id', hotelController.eliminarHotel);
 
 // Rutas de administración de guías turísticos
-router.get('/guias', guiaTuristicoController.obtenerGuias);
+router.get('/guias',authMiddleware, guiaTuristicoController.obtenerGuias);
 router.get('/guias/crear', guiaTuristicoController.formularioCrearGuia);
 router.post('/guias/crear', guiaTuristicoController.crearGuia);
 router.get('/guias/editar/:id', guiaTuristicoController.formularioEditarGuia);
@@ -76,5 +76,9 @@ router.get('/testimoniales', testimonialesController.paginaTestimonialesAdmin);
 
 //Rutas de administración de reservas
 router.get('/reservas', reservaController.obtenerReservasAdmin);
+
+//Aplicar middleware a todas las rutas
+import authMiddleware from '../middlewares/authMiddleware.js';
+router.use(authMiddleware);
 
 export default router;
