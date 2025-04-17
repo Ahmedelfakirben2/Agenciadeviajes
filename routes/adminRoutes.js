@@ -9,54 +9,50 @@ import {
   eliminarViaje
 } from '../controllers/viajeController.js';
 import { upload, processImage } from '../middlewares/uploadImage.js';
-
-// Importar los controladores de hoteles
 import * as hotelController from '../controllers/hotelController.js';
-
-// Importar los controladores de guías turísticos
 import * as guiaTuristicoController from '../controllers/guiaTuristicoController.js';
-
-// Importar el controlador de testimoniales
 import * as testimonialesController from '../controllers/testimonialesController.js';
-
-//Importar el controlador de reservas
 import * as reservaController from '../controllers/reservaController.js';
+import authMiddleware from '../middlewares/authMiddleware.js'; // Importar el middleware de autenticación
 
 const router = express.Router();
 
+// --- ¡IMPORTANTE! Aplicar el middleware de autenticación PRIMERO a TODAS las rutas de admin ---
+router.use(authMiddleware);
+console.log('>>>> Middleware de Autenticación Aplicado a /admin'); // Logging para depuración
+
+// --- RUTAS DE ADMINISTRACIÓN (Ya protegidas por router.use(authMiddleware)) ---
+
 // Ruta principal de administración
 router.get('/', (req, res) => {
+  // Ya no necesitas verificar req.session.authUser aquí, el middleware lo hizo
   res.render('admin/index', {
     pagina: 'Panel de Administración'
+    // Puedes pasar datos del usuario si los guardaste en la sesión
+    // user: req.session.user // Ejemplo
   });
 });
 
 // Rutas de administración de viajes
-router.get('/viajes',authMiddleware, obtenerViajes);
+router.get('/viajes', obtenerViajes); // No necesita 'authMiddleware' individualmente
 router.get('/viajes/crear', formularioCrearViaje);
 router.post('/viajes/crear',
-  upload.single('imagen'), // Ahora es opcional porque podemos usar URL
-  (req, res, next) => {
-    req.params.category = 'viajes';
-    next();
-  },
+  upload.single('imagen'),
+  (req, res, next) => { req.params.category = 'viajes'; next(); },
   processImage,
   crearViaje
 );
 router.get('/viajes/editar/:id', formularioEditarViaje);
 router.post('/viajes/editar/:id',
-  upload.single('imagen'), // Ahora es opcional porque podemos usar URL
-  (req, res, next) => {
-    req.params.category = 'viajes';
-    next();
-  },
+  upload.single('imagen'),
+  (req, res, next) => { req.params.category = 'viajes'; next(); },
   processImage,
   actualizarViaje
 );
 router.post('/viajes/eliminar/:id', eliminarViaje);
 
 // Rutas de administración de hoteles
-router.get('/hoteles',authMiddleware, hotelController.obtenerHoteles);
+router.get('/hoteles', hotelController.obtenerHoteles); // No necesita 'authMiddleware' individualmente
 router.get('/hoteles/crear', hotelController.formularioCrearHotel);
 router.post('/hoteles/crear', hotelController.crearHotel);
 router.get('/hoteles/editar/:id', hotelController.formularioEditarHotel);
@@ -64,7 +60,7 @@ router.post('/hoteles/editar/:id', hotelController.actualizarHotel);
 router.post('/hoteles/eliminar/:id', hotelController.eliminarHotel);
 
 // Rutas de administración de guías turísticos
-router.get('/guias',authMiddleware, guiaTuristicoController.obtenerGuias);
+router.get('/guias', guiaTuristicoController.obtenerGuias); // No necesita 'authMiddleware' individualmente
 router.get('/guias/crear', guiaTuristicoController.formularioCrearGuia);
 router.post('/guias/crear', guiaTuristicoController.crearGuia);
 router.get('/guias/editar/:id', guiaTuristicoController.formularioEditarGuia);
@@ -74,11 +70,9 @@ router.post('/guias/eliminar/:id', guiaTuristicoController.eliminarGuia);
 // Rutas de administración de testimoniales
 router.get('/testimoniales', testimonialesController.paginaTestimonialesAdmin);
 
-//Rutas de administración de reservas
+// Rutas de administración de reservas
 router.get('/reservas', reservaController.obtenerReservasAdmin);
 
-//Aplicar middleware a todas las rutas
-import authMiddleware from '../middlewares/authMiddleware.js';
-router.use(authMiddleware);
+// --- Ya NO es necesario importar authMiddleware ni usar router.use aquí al final ---
 
 export default router;

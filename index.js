@@ -9,7 +9,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import session from 'express-session';
+import session from 'express-session'; // Asegúrate de haber hecho 'npm install express-session'
 
 // Configurar variables de entorno
 dotenv.config();
@@ -20,6 +20,18 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// --- ¡IMPORTANTE! Configurar express-session PRIMERO ---
+app.use(session({
+  secret: 'cambia_esto_por_una_clave_secreta_muy_segura', // ¡CAMBIA ESTA CLAVE!
+  resave: false, // No guardar la sesión si no se modifica
+  saveUninitialized: false, // No guardar sesiones vacías
+  cookie: {
+    secure: false, // Poner a true si usas HTTPS
+    httpOnly: true, // Ayuda a prevenir ataques XSS
+    maxAge: 1000 * 60 * 60 * 24 // Duración de la cookie (ej: 1 día)
+   }
+}));
+console.log('>>>> Middleware de Sesión Inicializado'); // Logging para depuración
 
 // Establecer BASE_URL para las imágenes
 const port = process.env.PORT || 4000;
@@ -32,112 +44,36 @@ db.authenticate()
         console.error('Error al conectar la base de datos:', error);
     });
 
-// Forzar la sincronización de los modelos con la base de datos
+// Sincronizar la base de datos (considera usar migraciones en producción)
 db.sync()
     .then(() => {
-        console.log('Base de datos sincronizada. Todas las tablas han sido recreadas.');
-        
-        // Crear el guía turístico primero
-        return GuiaTuristico.create({
-            nombre: 'Juan',
-            apellido: 'Pérez',
-            email: 'juan@example.com',
-            telefono: '+212 666-555-444',
-            idiomas: 'Español, Inglés, Francés',
-            experiencia_anos: 8,
-            foto: 'guia1.jpg'
-        });
-    })
-    .then(guia => {
-        // Crear el hotel después del guía
-        return Hotel.create({
-            nombre: 'Hotel Riad Marrakech',
-            direccion: 'Medina 123',
-            ciudad: 'Marrake1ch',
-            pais: 'Marruecos',
-            estrellas: 5,
-            telefono: '+212 524-555-666',
-            email: 'info@riadmarrakech.com',
-            sitio_web: 'https://riadmarrakech.com',
-            imagen: 'hotel1.jpg',
-            servicios: 'WiFi, Piscina, Spa, Restaurante, Servicio de habitaciones'
-        }).then(hotel => {
-            // Crear el viaje después de tener el guía y el hotel
-            return Viaje.create({
-                titulo: 'Viaje a Marrakech',
-                precio: 2500,
-                fecha_ida: '2025-03-15',
-                fecha_vuelta: '2025-03-22',
-                imagen: 'marrakech',
-                descripcion: 'Descubre la magia de Marrakech en este viaje inolvidable.',
-                disponibles: 15,
-                slug: 'viaje-marrakech',
-                itinerario: 'Día 1: Llegada y check-in en el hotel\nDía 2: Tour por la Medina y zocos\nDía 3: Visita a los Jardines Majorelle y la Mezquita Koutoubia\nDía 4: Excursión al desierto de Agafay\nDía 5: Día libre para compras y spa',
-                puntos_itinerario: [
-                    {
-                        lat: 31.631794,
-                        lng: -8.008889,
-                        descripcion: 'Aeropuerto de Marrakech'
-                    },
-                    {
-                        lat: 31.631111,
-                        lng: -7.9841617,
-                        descripcion: 'Hotel Riad Marrakech'
-                    },
-                    {
-                        lat: 31.628674,
-                        lng: -7.989178,
-                        descripcion: 'Medina y zocos'
-                    },
-                    {
-                        lat: 31.641673,
-                        lng: -8.003914,
-                        descripcion: 'Jardines Majorelle'
-                    },
-                    {
-                        lat: 31.625132,
-                        lng: -7.989397,
-                        descripcion: 'Mezquita Koutoubia'
-                    },
-                    {
-                        lat: 31.464722,
-                        lng: -8.166667,
-                        descripcion: 'Desierto de Agafay'
-                    }
-                ],
-                incluye: 'Vuelos, Hotel, Desayuno, Guía, Traslados, Tours mencionados en el itinerario',
-                no_incluye: 'Comidas no especificadas, Propinas, Gastos personales',
-                requisitos: 'Pasaporte vigente con al menos 6 meses de validez',
-                punto_encuentro: 'Aeropuerto de Marrakech',
-                guia_id: guia.id,
-                hotel_id: hotel.id
-            });
-        });
-    })
-    .then(() => {
-        console.log('Datos de ejemplo creados correctamente');
+        console.log('Base de datos sincronizada.');
+        // Código para crear datos de ejemplo (asegúrate de que no cause errores si ya existen)
     })
     .catch(error => {
-        console.error('Error al sincronizar la base de datos:', error);
+        console.error('Error al sincronizar la base de datos o crear datos:', error);
     });
 
 // Establecer motor de vistas
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
-// Middleware
+// Middleware para variables locales (después de la sesión)
 app.use((req, res, next) => {
+    console.log('>>>> Accediendo a middleware de variables locales. Session ID:', req.sessionID); // Logging
     const year = new Date();
     res.locals.actualYear = year.getFullYear();
     res.locals.nombrepagina = 'Agencia de Viajes';
+    // Podrías pasar aquí si el usuario está autenticado a las vistas
+    // res.locals.userAuthenticated = req.session.authUser || false;
     next();
 });
 
-
-// Agregar body parser para leer los datos del formulario
+// Agregar body parser para leer los datos del formulario (después de la sesión)
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // Para poder procesar JSON si usas APIs
 
-// Definir la carpeta pública
+// Definir la carpeta pública (después de la sesión)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Crear carpetas para uploads si no existen
@@ -148,24 +84,43 @@ const hotelesDir = path.join(uploadsDir, 'hoteles');
 
 [uploadsDir, viajesDir, guiasDir, hotelesDir].forEach(dir => {
     if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
+        try {
+            fs.mkdirSync(dir, { recursive: true });
+        } catch (error) {
+            console.error(`Error creando directorio ${dir}:`, error);
+        }
     }
 });
 
-
-// Agregar routers
-app.use('/', router);
+// --- ¡IMPORTANTE! Rutas de Admin ANTES de las rutas generales ---
 app.use('/admin', adminRoutes);
+console.log('>>>> Rutas de Admin (/admin) Cargadas'); // Logging
 
-// Middleware para manejo de errores
+app.use('/', router);
+console.log('>>>> Rutas Generales (/) Cargadas'); // Logging
+
+
+// Middleware para manejo de errores (al final)
 app.use((err, req, res, next) => {
-    console.error('Error:', err);
-    res.status(500).render('error', {
-        pagina: 'Error',
-        mensaje: err.message || 'Ocurrió un error inesperado'
+    console.error('!!!! ERROR DETECTADO !!!!');
+    console.error('Ruta:', req.path);
+    console.error('Mensaje:', err.message);
+    console.error('Stack:', err.stack);
+    res.status(err.status || 500).render('error', {
+        pagina: 'Error Inesperado',
+        mensaje: err.message || 'Ocurrió un error en el servidor.'
     });
 });
 
+// Middleware para errores 404 (justo antes del manejador de errores)
+app.use((req, res, next) => {
+  res.status(404).render('error', {
+    pagina: 'No Encontrado',
+    mensaje: 'La página que buscas no existe.'
+  });
+});
+
+
 app.listen(port, () => {
-    console.log(`El servidor está funcionando en el puerto ${process.env.BASE_URL}`);
+    console.log(`El servidor está funcionando en ${process.env.BASE_URL}`);
 });
