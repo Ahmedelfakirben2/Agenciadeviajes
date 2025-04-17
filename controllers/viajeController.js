@@ -135,12 +135,6 @@ export const crearViaje = async (req, res) => {
         // Crear el slug
         const slug = slugify(titulo, { lower: true });
         
-        let imagenes = [];
-
-        if (req.files && req.files.length > 0) {
-          const uploadsDir = path.join(path.resolve(), 'public', 'uploads', 'viajes');
-
-          // Verificar si el directorio existe y crearlo si no
           if (!fs.existsSync(uploadsDir)) {
             fs.mkdirSync(uploadsDir, { recursive: true });
           }
@@ -153,29 +147,28 @@ export const crearViaje = async (req, res) => {
               .resize({ width: 800, height: 600, fit: 'inside' })
               .toFile(filePath);
 
-            return `/uploads/viajes/${uniqueFilename}`; // Ruta relativa para guardar en la base de datos
+            return `/uploads/viajes/${uniqueFilename}`;
           }));
         }
 
-        // Crear el viaje
-        await Viaje.create({
-      titulo,
-      precio,
-      fecha_ida,
-      fecha_vuelta,
-      imagen,
-      descripcion,
-      disponibles,
-      slug,
-      itinerario,
-      puntos_itinerario,
-      incluye,
-      no_incluye,
-      requisitos,
-      punto_encuentro,
-      guia_id,
-      hotel_id,
-      imagenes
+          // Crear el viaje
+          await Viaje.create({
+            titulo,
+            precio,
+            fecha_ida,
+            fecha_vuelta,
+            imagenes: imagenes.length ? imagenes : [],
+            descripcion,
+            disponibles,
+            slug,
+            itinerario,
+            puntos_itinerario,
+            incluye,
+            no_incluye,
+            requisitos,
+            punto_encuentro,
+            guia_id,
+            hotel_id,
         });
 
         res.redirect('/admin/viajes');
