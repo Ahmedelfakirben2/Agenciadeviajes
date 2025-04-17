@@ -27,3 +27,4 @@ export const Reserva = db.define('reservas', {
         allowNull: false
     }
 });
+export { Reserva };

@@ -33,4 +33,4 @@ export const GuiaTuristico = db.define('guias_turisticos', {
         type: Sequelize.STRING,
         allowNull: true
     }
-});
+export { GuiaTuristico };

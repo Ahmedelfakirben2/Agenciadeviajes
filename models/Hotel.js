@@ -52,3 +52,4 @@ export const Hotel = db.define('hoteles', {
         allowNull: true
     }
 });
+export { Hotel };
