@@ -134,11 +134,16 @@ export const crearViaje = async (req, res) => {
         
         // Crear el slug
         const slug = slugify(titulo, { lower: true });
-        
-          if (!fs.existsSync(uploadsDir)) {
-            fs.mkdirSync(uploadsDir, { recursive: true });
-          }
 
+        let imagenes = []; // Declarar imagenes aquí
+        const uploadsDir = path.join(path.resolve(), 'public', 'uploads', 'viajes');
+
+        try {
+          // Verificar si el directorio existe y crearlo si no
+          if (!fs.existsSync(uploadsDir)) {
+              fs.mkdirSync(uploadsDir, { recursive: true });
+          }
+          
           imagenes = await Promise.all(req.files.map(async (file) => {
             const uniqueFilename = `${uuidv4()}-${Date.now()}${path.extname(file.originalname)}`;
             const filePath = path.join(uploadsDir, uniqueFilename);
@@ -148,43 +153,43 @@ export const crearViaje = async (req, res) => {
               .toFile(filePath);
 
             return `/uploads/viajes/${uniqueFilename}`;
-          }));
+        }));
         } catch (error) {
-          console.error("Error processing images:", error);
+            console.error("Error processing images:", error);
         }
 
-          // Crear el viaje
-          await Viaje.create({
-            titulo,
-            precio,
-            fecha_ida,
-            fecha_vuelta,
-            imagenes: imagenes.length ? imagenes : [],
-            descripcion,
-            disponibles,
-            slug,
-            itinerario,
-            puntos_itinerario,
-            incluye,
-            no_incluye,
-            requisitos,
-            punto_encuentro,
-            guia_id,
-            hotel_id,
+        // Crear el viaje
+        await Viaje.create({
+          titulo,
+          precio,
+          fecha_ida,
+          fecha_vuelta,
+          imagenes: imagenes.length ? imagenes : [],
+          descripcion,
+          disponibles,
+          slug,
+          itinerario,
+          puntos_itinerario,
+          incluye,
+          no_incluye,
+          requisitos,
+          punto_encuentro,
+          guia_id,
+          hotel_id,
         });
-        
+
         res.redirect('/admin/viajes');
-      } catch (error) {
-        console.log(error);
-        return res.render('admin/crear-viaje', {
-          pagina: 'Crear Nuevo Viaje',
-          errores: [{ msg: 'Error al guardar el viaje. Por favor, intenta de nuevo.' }],
-          // Asegúrate de que guias y hoteles están definidos incluso en caso de error
-          ... (await Promise.all([GuiaTuristico.findAll(), Hotel.findAll()]).then(([guias, hoteles]) => ({ guias, hoteles }))),
-          viaje: req.body
-        });
-      }
-    });
+    } catch (error) {
+      console.log(error);
+      return res.render('admin/crear-viaje', {
+        pagina: 'Crear Nuevo Viaje',
+        errores: [{ msg: 'Error al guardar el viaje. Por favor, intenta de nuevo.' }],
+        // Asegúrate de que guias y hoteles están definidos incluso en caso de error
+        ... (await Promise.all([GuiaTuristico.findAll(), Hotel.findAll()]).then(([guias, hoteles]) => ({ guias, hoteles }))),
+        viaje: req.body
+      });
+    }
+  });
 };
 
 // Formulario para editar viaje
