@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 import db from '../config/db.js';
 
-export const Hotel = db.define('hoteles', {
+const Hotel = db.define('hoteles', {
     nombre: {
         type: Sequelize.STRING,
         allowNull: false

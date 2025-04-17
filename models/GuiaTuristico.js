@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 import db from '../config/db.js';
 
-export const GuiaTuristico = db.define('guias_turisticos', {
+const GuiaTuristico = db.define('guias_turisticos', {
     nombre: {
         type: Sequelize.STRING,
         allowNull: false
@@ -32,5 +32,6 @@ export const GuiaTuristico = db.define('guias_turisticos', {
     foto: {
         type: Sequelize.STRING,
         allowNull: true
-    }
+    }});
+export { GuiaTuristico };
 export { GuiaTuristico };

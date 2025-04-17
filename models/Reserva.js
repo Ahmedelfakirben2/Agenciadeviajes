@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 import db from '../config/db.js';
 
-export const Reserva = db.define('reservas', {
+const Reserva = db.define('reservas', {
     nombre: {
         type: Sequelize.STRING,
         allowNull: false
