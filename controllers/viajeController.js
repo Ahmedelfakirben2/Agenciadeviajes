@@ -297,16 +297,6 @@ export const eliminarViaje = async (req, res) => {
       });
     }
     
-    // Eliminar la imagen asociada si es una URL completa
-    if (viaje.imagen.startsWith('http')) {
-      const urlParts = new URL(viaje.imagen);
-      const imagePath = urlParts.pathname;
-      const fullPath = path.join(__dirname, '../public', imagePath);
-      
-      if (fs.existsSync(fullPath)) {
-        fs.unlinkSync(fullPath);
-      }
-    }
     
     // Eliminar el viaje
     await viaje.destroy();
