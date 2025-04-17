@@ -5,30 +5,29 @@ block contenido
     h1.text-center.mb-5 Guías Turísticos
 
     a.btn.btn-primary.mb-3(href="/admin/guias/crear") Agregar Guía
-
-.row
-  each guia in guias
-    .col-md-6.col-lg-4.mb-4
-      .card
-        if guia.foto
-          img.card-img-top(src=guia.foto.startsWith('http') ? guia.foto : `${process.env.BASE_URL}/uploads/guias/${guia.foto}`, alt=`Foto de ${guia.nombre}`)
-        else
-          img.card-img-top(src=`${process.env.BASE_URL}/img/default_guia.jpg`, alt="Foto por defecto")
-        .card-body
-          h5.card-title= `${guia.nombre} ${guia.apellido}`
-          p.card-text
-            strong Email: 
-            span= guia.email
-          p.card-text
-            strong Teléfono: 
-            span= guia.telefono
-          p.card-text
-            strong Experiencia: 
-            span= `${guia.experiencia_anos} años`
-          p.card-text
-            strong Idiomas: 
-            span= guia.idiomas
-          .d-flex.justify-content-between
-            a.btn.btn-sm.btn-warning(href=`/admin/guias/editar/${guia.id}`) Editar
-            form(action=`/admin/guias/eliminar/${guia.id}` method="POST")
-              button.btn.btn-sm.btn-danger(type="submit") Eliminar
+    .row
+      each guia in guias
+        .col-md-6.col-lg-4.mb-4
+          .card
+            if guia.foto
+              img.card-img-top(src=guia.foto.startsWith('http') ? guia.foto : `${process.env.BASE_URL}/uploads/guias/${guia.foto}`, alt=`Foto de ${guia.nombre}`)
+            else
+              img.card-img-top(src=`${process.env.BASE_URL}/img/default_guia.jpg`, alt="Foto por defecto")
+            .card-body
+              h5.card-title= `${guia.nombre} ${guia.apellido}`
+              p.card-text
+                strong Email: 
+                span= guia.email
+              p.card-text
+                strong Teléfono: 
+                span= guia.telefono
+              p.card-text
+                strong Experiencia: 
+                span= `${guia.experiencia_anos} años`
+              p.card-text
+                strong Idiomas: 
+                span= guia.idiomas
+              .d-flex.justify-content-between
+                a.btn.btn-sm.btn-warning(href=`/admin/guias/editar/${guia.id}`) Editar
+                form(action=`/admin/guias/eliminar/${guia.id}` method="POST")
+                  button.btn.btn-sm.btn-danger(type="submit") Eliminar
