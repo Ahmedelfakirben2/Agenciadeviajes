@@ -5,8 +5,18 @@ block contenido
     h1.text-center.mb-5 Editar Guía Turístico
 
     .row.justify-content-center
-      .col-md-8
-        form(action=`/admin/guias/editar/${guia.id}` method="POST")
+      .col-md-8.card.p-4
+        // Mostrar imagen actual
+        if guia.foto
+          img.img-fluid.mb-3(src=`${process.env.BASE_URL}${guia.foto}`, alt=`Foto actual de ${guia.nombre}`)
+        else
+          img.img-fluid.mb-3(src=`${process.env.BASE_URL}/uploads/guias/default.jpg`, alt="Imagen por defecto")
+
+        form(action=`/admin/guias/editar/${guia.id}?_method=PUT`, method="POST", enctype="multipart/form-data")
+          .mb-3
+            label.form-label(for="foto") Foto (Opcional)
+            input#foto.form-control(type="file" name="foto", accept="image/*")
+
           .mb-3
             label.form-label(for="nombre") Nombre
             input#nombre.form-control(type="text" name="nombre" value=guia.nombre required)
