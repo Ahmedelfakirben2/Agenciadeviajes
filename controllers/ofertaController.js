@@ -10,6 +10,7 @@ import fs from 'fs';
 export const obtenerOfertas = async (req, res) => {
     try {
         const ofertas = await Oferta.findAll();
+        const ofertasData = ofertas.map(oferta => oferta.dataValues);
         console.log('ofertas:', ofertas);
         res.render('admin/ofertas/ofertas', {
             pagina: 'Administrar Ofertas',
