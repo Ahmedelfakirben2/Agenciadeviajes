@@ -10,6 +10,7 @@ import fs from 'fs';
 export const obtenerOfertas = async (req, res) => {
     try {
         const ofertas = await Oferta.findAll();
+        console.log('ofertas:', ofertas);
         res.render('admin/ofertas/ofertas', {
             pagina: 'Administrar Ofertas',
             ofertas
@@ -19,7 +20,7 @@ export const obtenerOfertas = async (req, res) => {
         res.status(500).render('error', {
             pagina: 'Error',
             mensaje: 'Error al cargar las ofertas'
-        });
+        }, console.error("Error al obtener ofertas:", error));
     }
 };
 

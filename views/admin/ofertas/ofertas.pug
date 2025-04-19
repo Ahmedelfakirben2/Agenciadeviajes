@@ -17,7 +17,7 @@ block contenido
                         th(scope="col") Anuncio
                         th(scope="col") Acciones
                 tbody
-                  if ofertas && ofertas.length
+                  if Array.isArray(ofertas) && ofertas.length
                       each oferta in ofertas
                           tr
                               td
