@@ -3,64 +3,13 @@ extends ../layout/index
 
 block contenido
     main.container.mt-5
-        h1.text-center.mb-5= pagina
-        .row.mb-4
-            .col-md-12.text-end
-                a.btn.btn-success(href="/admin/ofertas/crear")
-                    i.fas.fa-plus.me-2
-                    | Nueva Oferta
+    h1.text-center.mb-5= pagina
 
-        if ofertas && ofertas.length > 0
-          .table-responsive
-            table.table.table-striped.table-hover
-              thead.bg-primary.text-white
-                tr
-                  th(scope="col") Imagen
-                  th(scope="col") Anuncio
-                  th(scope="col") Acciones
-              tbody
-                // Asegurarse de que esta línea sea exactamente así
-                each oferta in ofertas 
-                  tr
-                    td
-                      if oferta.imagen
-                        // Asumiendo que oferta.imagen es la ruta STRING como '/uploads/...'                        
-                        img.img-thumbnail(src=`/public${oferta.imagen}` alt=oferta.anuncio width="100")
-                      else
-                        img.img-thumbnail(src="/img/0.jpg" alt="Sin imagen" width="100")
-                    td= oferta.anuncio
-                    td.d-flex.gap-1
-                      a.btn.btn-sm.btn-warning(href=`/admin/ofertas/editar/${oferta.id}`)
-                        i.fas.fa-edit
-                      button.btn.btn-sm.btn-danger(type="button" data-bs-toggle="modal" data-bs-target="#eliminarModal" data-bs-id=oferta.id data-bs-titulo=oferta.anuncio)
-                        i.fas.fa-trash
-        else
-          .alert.alert-info.text-center No hay ofertas registradas
-    // Modal para confirmar eliminación
-    #eliminarModal.modal.fade(tabindex="-1" aria-labelledby="eliminarModalLabel" aria-hidden="true")
-        .modal-dialog
-            .modal-content
-                .modal-header
-                    h5#eliminarModalLabel.modal-title Eliminar Oferta
-                    button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
-                .modal-body
-                    p ¿Está seguro que desea eliminar la oferta <strong id="modalOfertaAnuncio"></strong>?
-                    p Esta acción no se puede deshacer.
-                .modal-footer
-                    form#formEliminar(action="" method="POST")
-                        button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cancelar
-                        button.btn.btn-danger(type="submit") Eliminar
-
-block scripts
-    script.
-        // Configurar modal para eliminar oferta
-        const eliminarModal = document.getElementById('eliminarModal');
-        if (eliminarModal) {
-            eliminarModal.addEventListener('show.bs.modal', event => {
-                const button = event.relatedTarget;
-                const id = button.getAttribute('data-bs-id');
-                const titulo = button.getAttribute('data-bs-titulo');
-                document.getElementById('modalOfertaAnuncio').textContent = titulo;
-                document.getElementById('formEliminar').action = `/admin/ofertas/eliminar/${id}`;
-            });
-        }
+    if ofertas && ofertas.length > 0
+      h2 Lista Simple de Ofertas:
+      ul
+        // Intento con iteración simple
+        each oferta in ofertas
+          li= oferta.anuncio
+    else
+      p No hay ofertas registradas.
