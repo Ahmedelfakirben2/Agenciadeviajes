@@ -21,7 +21,7 @@ block contenido
                       each oferta in ofertas
                           tr
                               td
-                                  img.img-thumbnail(src=oferta.imagen alt=oferta.anuncio width="100")
+                                  img.img-thumbnail(src=`/public${oferta.imagen}` alt=oferta.anuncio width="100")
                               td= oferta.anuncio
                               td.d-flex.gap-1
                                   a.btn.btn-sm.btn-warning(href=`/admin/ofertas/editar/${oferta.id}`)
