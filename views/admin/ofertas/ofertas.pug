@@ -19,7 +19,8 @@ block contenido
                   th(scope="col") Anuncio
                   th(scope="col") Acciones
               tbody
-                each oferta in ofertas // Asegurarse de que esta línea sea exactamente así
+                // Asegurarse de que esta línea sea exactamente así
+                each oferta in ofertas
                   tr
                     td
                       if oferta.imagen
