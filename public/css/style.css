@@ -41,6 +41,7 @@ h3 {
     align-items: center;
     justify-content: center;
     color: white;
+    text-align: center;
 }
 .slider h1 {
     color: white;
@@ -51,10 +52,11 @@ h3 {
     order: -1;
     line-height: .8;
     color: rgba(255, 255, 255, .5);
+    margin-bottom: 1rem;
 }
 @media (min-width:768px) {
     .slider em {
-        font-size: 8rem;
+        font-size: 5rem;
     }
 }
 .home {
