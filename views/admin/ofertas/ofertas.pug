@@ -17,17 +17,20 @@ block contenido
                         th(scope="col") Anuncio
                         th(scope="col") Acciones
                 tbody
-                  if Array.isArray(ofertas) && ofertas.length
-                      each oferta in ofertas
-                          tr
-                              td
-                                  img.img-thumbnail(src=`/public${oferta.imagen}` alt=oferta.anuncio width="100")
-                              td= oferta.anuncio
-                              td.d-flex.gap-1
-                                  a.btn.btn-sm.btn-warning(href=`/admin/ofertas/editar/${oferta.id}`)
-                                      i.fas.fa-edit
-                                  button.btn.btn-sm.btn-danger(type="button" data-bs-toggle="modal" data-bs-target="#eliminarModal" data-bs-id=oferta.id data-bs-titulo=oferta.anuncio)
-                                      i.fas.fa-trash
+                  if ofertas && ofertas.length
+                    each oferta in ofertas
+                      tr
+                        td
+                          if oferta.imagen
+                            img.img-thumbnail(src=`/public${oferta.imagen}` alt=oferta.anuncio width="100")
+                          else 
+                            img.img-thumbnail(src="/img/0.jpg" alt="Sin imagen" width="100")
+                        td= oferta.anuncio
+                        td.d-flex.gap-1
+                          a.btn.btn-sm.btn-warning(href=`/admin/ofertas/editar/${oferta.id}`)
+                            i.fas.fa-edit
+                          button.btn.btn-sm.btn-danger(type="button" data-bs-toggle="modal" data-bs-target="#eliminarModal" data-bs-id=oferta.id data-bs-titulo=oferta.anuncio)
+                            i.fas.fa-trash
                   else
                       tr
                         td(colspan="3").text-center.alert.alert-info No hay ofertas registradas

@@ -9,12 +9,15 @@ import fs from 'fs';
 // Obtener todas las ofertas
 export const obtenerOfertas = async (req, res) => {
     try {
-        const ofertas = await Oferta.findAll();
-        const ofertasData = ofertas.map(oferta => oferta.dataValues);
-        console.log('ofertas:', ofertas);
+        let ofertas = await Oferta.findAll();
+        for (const oferta of ofertas) {
+          if (!oferta.imagen) {
+            oferta.imagen = [];
+          }
+        }
         res.render('admin/ofertas/ofertas', {
             pagina: 'Administrar Ofertas',
-            ofertas
+            ofertas,
         });
     } catch (error) {
         console.error("Error al obtener ofertas:", error);
